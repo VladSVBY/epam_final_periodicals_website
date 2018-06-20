@@ -11,6 +11,10 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_PARAM_LOGIN_OR_EMAIL = "login_or_email";
 	public static final String REQUEST_PARAM_PASSWORD = "password";
 	public static final String REQUEST_PARAM_LOCALE = "locale";
+	public static final String REQUEST_PARAM_LOGIN = "login";
+	public static final String REQUEST_PARAM_NAME = "name";
+	public static final String REQUEST_PARAM_SURNAME = "surName";
+	public static final String REQUEST_PARAM_EMAIL = "email";
 	
 	public static final String SESSION_ATTR_LOCALE = "locale";
 	public static final String SESSION_ATTR_REFER_PAGE = "referPage";

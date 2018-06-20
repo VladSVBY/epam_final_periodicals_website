@@ -21,4 +21,15 @@ public class UserServiceImpl implements UserService{
 		return null;
 	}
 
+	@Override
+	public void registerUser(User user) {
+		try {
+			userDao.create(user);
+		} catch (ConnectionPoolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }

@@ -5,4 +5,6 @@ import by.epam.periodicials_site.entity.User;
 public interface UserService {
 
 	User getUser(String loginOrEmail, String password);
+	
+	void registerUser(User user);
 }

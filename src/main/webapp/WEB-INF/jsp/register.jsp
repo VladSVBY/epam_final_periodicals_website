@@ -26,23 +26,23 @@
 		}
 	</script>
 
-	<form modelAttribute="user" action="${contextPath}/registration/register_user" method="post">
+	<form action="<c:url value="register" />" method="post">
 	    <h1>Sign Up</h1>
 	    <fieldset id="inputs">
-	    	<label path="login">Login</label><br/>
-	        <input path="login" onblur="checkLogin()" /><span id="login_msg"></span><br/>
+	    	<label for="login">Login</label><br/>
+	        <input name="login" onblur="checkLogin()" /><span id="login_msg"></span><br/>
 	        
-	        <label path="password">Password</label><br/>   
-	        <input path="password" /><br/>
+	        <label for="password">Password</label><br/>   
+	        <input name="password" /><br/>
 	        
-	        <label path="login">First Name</label><br/>
-	        <input path="firstName" /><br/>
+	        <label for="name">First Name</label><br/>
+	        <input name="name" /><br/>
 	        
-	        <label path="login">Last Name</label><br/>
-	        <input path="lastName" /><br/>
+	        <label for="surName">Last Name</label><br/>
+	        <input name="surName" /><br/>
 	        
-	        <label path="login">Email</label><br/>
-	        <input path="email" />
+	        <label for="email">Email</label><br/>
+	        <input name="email" />
 	        
 	        <div><c:out value="${fail_msg}"></c:out></div>
 	    </fieldset><br/>
