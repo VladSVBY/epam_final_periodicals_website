@@ -9,7 +9,6 @@ import java.sql.Statement;
 
 import by.epam.periodicials_site.dao.UserDao;
 import by.epam.periodicials_site.dao.pool.ConnectionPool;
-import by.epam.periodicials_site.dao.pool.ConnectionPoolException;
 import by.epam.periodicials_site.entity.Role;
 import by.epam.periodicials_site.entity.User;
 
@@ -21,9 +20,8 @@ public class UserDaoImpl implements UserDao{
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
-	public void create(User user) throws ConnectionPoolException {
-		Connection connection = connectionPool.getConnection();
-		try (PreparedStatement ps = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)){
+	public void create(User user) {
+		try (Connection connection = connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)){
 			ps.setString(1, user.getLogin());
 			ps.setString(2, user.getPassword());
 			ps.setString(3, user.getName());
@@ -39,29 +37,22 @@ public class UserDaoImpl implements UserDao{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			connectionPool.closeConnection(connection);
 		}
-		
 	}
 
 	@Override
-	public User readByLoginOrEmailAndPassword(String loginOrEmail, String password) throws ConnectionPoolException {
-		Connection connection = connectionPool.getConnection();
-		try (PreparedStatement ps = connection.prepareStatement(READ_USER)){
+	public User readByLoginOrEmailAndPassword(String loginOrEmail, String password) {
+		try (Connection connection = connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(READ_USER)){
 			ps.setString(1, loginOrEmail);
 			ps.setString(2, loginOrEmail);
 			ps.setString(3, password);
 			ResultSet resultSet = ps.executeQuery();
 			if (resultSet.next()) {
 				return createUser(resultSet);
-			}
-			
+			}			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			connectionPool.closeConnection(connection);
 		}
 		return null;
 	}

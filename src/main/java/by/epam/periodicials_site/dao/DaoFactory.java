@@ -6,7 +6,9 @@ public final class DaoFactory {
 
 	private DaoFactory() {}
 	
+	private static final UserDao USER_DAO = new UserDaoImpl();
+	
 	public static UserDao getUserDao() {
-		return new UserDaoImpl();
+		return USER_DAO;
 	}
 }

@@ -3,9 +3,16 @@
 html, body
 {
     height: 100%;
+    background-color: #d9dee2;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebeef2), to(#d9dee2));
+    background-image: -webkit-linear-gradient(top, #ebeef2, #d9dee2);
+    background-image: -moz-linear-gradient(top, #ebeef2, #d9dee2);
+    background-image: -ms-linear-gradient(top, #ebeef2, #d9dee2);
+    background-image: -o-linear-gradient(top, #ebeef2, #d9dee2);
+    background-image: linear-gradient(top, #ebeef2, #d9dee2); 
 }
 
-body
+#login
 {
     font: 12px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;    
     margin: 0;
@@ -30,7 +37,7 @@ body
     background-image: -o-linear-gradient(top, #fff, #eee);
     background-image: linear-gradient(top, #fff, #eee);  
     height: auto;
-    width: 400px;
+    width: 460px;
     margin: -150px 0 0 -230px;
     padding: 30px;
     position: absolute;
@@ -80,7 +87,7 @@ body
 
 /*--------------------*/
 
-h1
+#login h1
 {
     text-shadow: 0 1px 0 rgba(255, 255, 255, .7), 0px 2px 0 rgba(0, 0, 0, .5);
     text-transform: uppercase;
@@ -92,7 +99,7 @@ h1
     position: relative;
 }
 
-h1:after, h1:before
+#login h1:after, #login h1:before
 {
     background-color: #777;
     content: "";
@@ -102,7 +109,7 @@ h1:after, h1:before
     width: 120px;   
 }
 
-h1:after
+#login h1:after
 { 
     background-image: -webkit-gradient(linear, left top, right top, from(#777), to(#fff));
     background-image: -webkit-linear-gradient(left, #777, #fff);
@@ -113,7 +120,7 @@ h1:after
     right: 0;
 }
 
-h1:before
+#login h1:before
 {
     background-image: -webkit-gradient(linear, right top, left top, from(#777), to(#fff));
     background-image: -webkit-linear-gradient(right, #777, #fff);
@@ -126,7 +133,7 @@ h1:before
 
 /*--------------------*/
 
-fieldset
+#login fieldset
 {
     border: 0;
     padding: 0;
@@ -140,7 +147,7 @@ fieldset
     background: #f1f1f1 url(/dist/uploads/2011/09/login-sprite.png) no-repeat;
     padding: 15px 15px 15px 30px;
     margin: 0 0 10px 0;
-    width: 353px; /* 353 + 2 + 45 = 400 */
+    width: 413px; /* 353 + 2 + 45 = 400 */
     border: 1px solid #ccc;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -252,5 +259,3 @@ fieldset
     top: 60px;
     color: #999;
 }
-
-

@@ -1,152 +1,160 @@
 package by.epam.periodicials_site.dao.pool;
 
 import java.sql.Connection;
-
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import by.epam.periodicials_site.dao.pool.ConnectionPoolException;
-
-public class ConnectionPool {
+public final class ConnectionPool {
 	
-	//private static final Logger LOGGER = LogManager.getLogger();
-
-	/**
-     * Singleton instance
-     */
-	private static volatile ConnectionPool instance;
-
-	/**
-     * Configuration constants for the need to create a pool
-     */
-	private static final String DB_CONNECT_PROPERTY = "db";
+	private static final String DB_CONFIG_FILE = "db";
 	private static final String RESOURCE_DRIVER_NAME = "db.driver";
 	private static final String RESOURCE_URL = "db.url";
-	private static final String RESOURCE_LOGIN = "db.user";
-	private static final String RESOURCE_PASS = "db.password";
-	private static final int MAX_CONNECTION_COUNT = 10;
-	private static final int MIN_CONNECTION_COUNT = 5;
+	private static final String RESOURCE_USER = "db.user";
+	private static final String RESOURCE_PASSWORD = "db.password";
+	private static final String RESOURCE_MIN_CONNECTION_COUNT = "db.min_connection_count";
+	private static final String RESOURCE_MAX_CONNECTION_COUNT = "db.max_connection_count";
 	
-	private static String url;
-	private static String login;
-	private static String pass;
-	private static String driverName;
-
-	static {
-		ResourceBundle rb = ResourceBundle.getBundle(DB_CONNECT_PROPERTY);
-		url = rb.getString(RESOURCE_URL);
-		login = rb.getString(RESOURCE_LOGIN);
-		pass = rb.getString(RESOURCE_PASS);
-		driverName = rb.getString(RESOURCE_DRIVER_NAME);
+	private String url;
+	private String user;
+	private String password;
+	private int maxConnectionCount;
+	private int minConnectionCount;
+	private final AtomicInteger currentConnectionNumber = new AtomicInteger(0);
+	
+	private static ConnectionPool instance = new ConnectionPool();
+	
+	private BlockingQueue<ConnectionProxy> freeConnections;
+	private ConcurrentHashMap<ConnectionProxy, Long> occupiedConnections;
+	private PoolChecker poolChecker;
+	private Lock lock = new ReentrantLock();
+	
+	private ConnectionPool() {
+		loadDBPropertiesAndRegisterDriver();
+		initializeConnections();
+		poolChecker = new PoolChecker();
+		poolChecker.start();
 	}
 	
-	
-	/**
-     * Variable leading accounting of current connections
-     */
-	private volatile int currentConnectionNumber = MIN_CONNECTION_COUNT;
-	private BlockingQueue<Connection> pool = new ArrayBlockingQueue<Connection>(MAX_CONNECTION_COUNT, true);
-
-	/**
-     * Singleton of connection pool
-     *
-     * @return instance
-     */ 
 	public static ConnectionPool getInstance() {
-		if (instance == null) {
-			synchronized (ConnectionPool.class) {
-				if (instance == null) {
-					instance = new ConnectionPool();
+		return instance;
+	}
+	
+	public Connection getConnection() throws SQLException {
+		ConnectionProxy connection = freeConnections.poll();
+		while (connection == null) {
+			createConnection();
+			connection = freeConnections.poll();
+		}
+		occupiedConnections.put(connection, System.currentTimeMillis());
+		return connection;
+	}
+	
+	public void releaseConnection(ConnectionProxy connection) throws SQLException {
+		connection.setAutoCommit(true);
+		connection.setReadOnly(false);
+		occupiedConnections.remove(connection);
+		freeConnections.offer(connection);
+	}
+	
+	public void destroy() {
+		poolChecker.stop = true;
+	}
+	
+	private void loadDBPropertiesAndRegisterDriver() {
+		ResourceBundle rb = ResourceBundle.getBundle(DB_CONFIG_FILE);
+		String driverName = rb.getString(RESOURCE_DRIVER_NAME);
+		url = rb.getString(RESOURCE_URL);
+		user = rb.getString(RESOURCE_USER);
+		password = rb.getString(RESOURCE_PASSWORD);
+		minConnectionCount = Integer.parseInt(rb.getString(RESOURCE_MIN_CONNECTION_COUNT));
+		maxConnectionCount = Integer.parseInt(rb.getString(RESOURCE_MAX_CONNECTION_COUNT));
+		try {
+			Class.forName(driverName);
+		} catch (ClassNotFoundException e) {
+			// TODO logger
+			throw new ConnectionPoolException("ConnectionPool initialization failed" ,e);
+		}
+	}
+	
+	private void initializeConnections() {
+		freeConnections = new ArrayBlockingQueue<>(maxConnectionCount);
+		occupiedConnections = new ConcurrentHashMap<>(maxConnectionCount);
+		try {
+			while (currentConnectionNumber.get() <= minConnectionCount) {
+				createConnection();
+			}
+		} catch (SQLException e) {
+			// TODO logger
+			throw new ConnectionPoolException("Connection initialization failed", e);
+		}
+	}
+	
+	private void createConnection() throws SQLException {
+		if (currentConnectionNumber.get() < maxConnectionCount) {
+			lock.lock();
+			if (currentConnectionNumber.get() < maxConnectionCount) {
+				try {
+					Connection connection = DriverManager.getConnection(url, user, password);
+					ConnectionProxy connectionProxy = new ConnectionProxy(connection);
+					freeConnections.add(connectionProxy);
+					currentConnectionNumber.incrementAndGet();
+				} finally {
+					lock.unlock();
 				}
 			}
 		}
-		return instance;
 	}
+	
+	private class PoolChecker extends Thread{
+		
+		private static final int MAX_SECONDS_OF_CONNECTION_OCCUPATION = 30;
+		private static final int INTERVAL_BETWEEN_CHECKS_MINUTES = 1;
+		
+		private boolean stop = false;
 
-     /**
-      * The constructor creates an instance of the pool.
-      * Initializes a constant number of connections = 5.
-      */
-	private ConnectionPool() {
-		try {
-			Class.forName(driverName);
-		} catch (ClassNotFoundException e) {
-			//LOGGER.error(e.getMessage(), e);
-		}
-		for (int i = 0; i < MIN_CONNECTION_COUNT; i++) {
-			try {
-				pool.add(DriverManager.getConnection(url, login, pass));
-			} catch (SQLException e) {
-				//LOGGER.error(e.getMessage(), e);
+		@Override
+		public void run() {
+			while (!stop) {
+				try {
+					Thread.sleep(TimeUnit.MINUTES.toMillis(INTERVAL_BETWEEN_CHECKS_MINUTES));
+				} catch (InterruptedException e) {
+					// TODO logger
+				}
+				checkOccupiedConnections();
 			}
 		}
-	}
-
-	/**
-	 * The method provides the user with a copy of connection from pool
-	 * 
-	 * @return Connection
-	 * @throws ConnectionPoolException
-	 */
-	public Connection getConnection() throws ConnectionPoolException {
-
-		Connection connection = null;
-		try {
-			if (pool.isEmpty() && currentConnectionNumber < MAX_CONNECTION_COUNT) {
-				openAdditionalConnection();
+		
+		private void checkOccupiedConnections() {
+			for (Map.Entry<ConnectionProxy, Long> entry : occupiedConnections.entrySet()) {
+				ConnectionProxy connection = entry.getKey();
+				long takeTime = entry.getValue();
+				try {
+					if (!connection.isClosed()) {
+						checkConnection(connection, takeTime);
+					} else {
+						occupiedConnections.remove(connection);
+						currentConnectionNumber.decrementAndGet();
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			connection = pool.take();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw new ConnectionPoolException(e);
 		}
-		return connection;
+		
+		private void checkConnection(ConnectionProxy connection, long takeTime) {
+			long timeOfOccupation = System.currentTimeMillis() - takeTime;
+		}
+		
 	}
-
-	/**
-	 * The method return the connection back to the pool
-     * when you are finished work with him.
-	 * 
-	 * @param connection
-	 * @throws ConnectionPoolException
-	 */
-	public void closeConnection(Connection connection) throws ConnectionPoolException {
-		if (connection != null) {
-
-			if (currentConnectionNumber > MIN_CONNECTION_COUNT) {
-				currentConnectionNumber--;
-			}
-			try {
-				pool.put(connection);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-				throw new ConnectionPoolException(e);
-			}
-
-		}
-	}
-
-	/**
-	 * Method providing additional
-     * connection to the database if necessary
-	 * 
-	 * @throws ConnectionPoolException
-	 */
-	private void openAdditionalConnection() throws ConnectionPoolException {
-		try {
-			Class.forName(driverName);
-		} catch (ClassNotFoundException e) {
-			throw new ConnectionPoolException(e);
-		}
-		try {
-			pool.add(DriverManager.getConnection(url, login, pass));
-			currentConnectionNumber++;
-		} catch (SQLException e) {
-			throw new ConnectionPoolException(e);
-		}
-	}
-
+	
 }

@@ -21,10 +21,13 @@
 		<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>${title}</title>
-		<link href="<c:url value="/resources/css/login.css" />" rel="stylesheet" /> 
+		<link href="<c:url value="/resources/css/login.css" />" rel="stylesheet" />
+		<link href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" rel="stylesheet"> 
 	</head>
 <body>
-<a href="<c:url value='change-locale?locale=ru_BY'/>">RU</a>|<a href="<c:url value='change-locale?locale=en_US'/>">EN</a>
+
+	<%@include file="nav.jsp" %>
+	
 	<form action="<c:url value="login" />" id="login" method="post">
 	    <h1>${main_header}</h1>
 	    <fieldset id="inputs">

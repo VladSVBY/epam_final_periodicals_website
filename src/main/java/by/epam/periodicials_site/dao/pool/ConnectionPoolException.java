@@ -1,16 +1,11 @@
 package by.epam.periodicials_site.dao.pool;
 
+public class ConnectionPoolException extends RuntimeException{
 
-public class ConnectionPoolException extends Exception{
-
-	private static final long serialVersionUID = -3172613280076668173L;
+	private static final long serialVersionUID = 341167489014415017L;
 
 	public ConnectionPoolException() {
-	}
-
-	public ConnectionPoolException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
+		super();
 	}
 
 	public ConnectionPoolException(String message, Throwable cause) {
@@ -24,5 +19,7 @@ public class ConnectionPoolException extends Exception{
 	public ConnectionPoolException(Throwable cause) {
 		super(cause);
 	}
+	
+	
 
 }

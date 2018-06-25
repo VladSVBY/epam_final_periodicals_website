@@ -1,6 +1,10 @@
 package by.epam.periodicials_site.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
+
+	private static final long serialVersionUID = -4210715155698940106L;
 	
 	private Integer id;
 	private String login;
