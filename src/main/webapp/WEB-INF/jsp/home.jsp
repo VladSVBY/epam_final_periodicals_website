@@ -23,7 +23,7 @@
 	<%@include file="nav.jsp" %>
 
 	<div class="album py-5 bg-light content">
-        <div class="container">
+<%--         <div class="container">
 
           <div class="row">
             <div class="col-md-4">
@@ -163,7 +163,11 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --%>
+        
+        <c:forEach items="${publications}" var="publication">
+        	<p>${publication.id} ${publication.name} ${publication.periodicity} ${publication.price} ${publication.rating}</p>
+        </c:forEach>
       </div>
 </body>
 </html>

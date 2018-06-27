@@ -15,4 +15,14 @@
   	<servlet-name>FrontController</servlet-name>
   	<url-pattern>/controller/*</url-pattern>
   </servlet-mapping>
+  
+  	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<filter-class>by.epam.periodicials_site.web.filter.EncodingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>EncodingFilter</filter-name>
+		<url-pattern>/controller/*</url-pattern>
+	</filter-mapping>
+
 </web-app>

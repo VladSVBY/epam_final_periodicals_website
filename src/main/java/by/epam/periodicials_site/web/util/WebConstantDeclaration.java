@@ -24,6 +24,7 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_HEADER_REFER_PAGE = "referer";
 	
 	public static final String REQUEST_ATTR_MSG_LOGIN_FAIL = "loginFailedMsg";
+	public static final String REQUEST_ATTR_PUBLICATION_LIST = "publications";
 	
 	public static final String COMMAND_HOME = "/home";
 	public static final String COMMAND_LOGIN = "/login";

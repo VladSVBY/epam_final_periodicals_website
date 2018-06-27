@@ -66,7 +66,8 @@ public final class ConnectionPool {
 	}
 	
 	public void destroy() {
-		poolChecker.stop = true;
+		//poolChecker.stopWork();
+		poolChecker.interrupt();
 	}
 	
 	private void loadDBPropertiesAndRegisterDriver() {
@@ -118,18 +119,16 @@ public final class ConnectionPool {
 		
 		private static final int MAX_SECONDS_OF_CONNECTION_OCCUPATION = 30;
 		private static final int INTERVAL_BETWEEN_CHECKS_MINUTES = 1;
-		
-		private boolean stop = false;
 
 		@Override
 		public void run() {
-			while (!stop) {
 				try {
-					Thread.sleep(TimeUnit.MINUTES.toMillis(INTERVAL_BETWEEN_CHECKS_MINUTES));
+					while (!interrupted()) {
+						checkOccupiedConnections();
+						Thread.sleep(TimeUnit.MINUTES.toMillis(INTERVAL_BETWEEN_CHECKS_MINUTES));
+					}
 				} catch (InterruptedException e) {
 					// TODO logger
-				}
-				checkOccupiedConnections();
 			}
 		}
 		
@@ -138,9 +137,8 @@ public final class ConnectionPool {
 				ConnectionProxy connection = entry.getKey();
 				long takeTime = entry.getValue();
 				try {
-					if (!connection.isClosed()) {
-						checkConnection(connection, takeTime);
-					} else {
+					checkConnection(connection, takeTime);
+					if (connection.isClosed()) {
 						occupiedConnections.remove(connection);
 						currentConnectionNumber.decrementAndGet();
 					}
@@ -151,8 +149,11 @@ public final class ConnectionPool {
 			}
 		}
 		
-		private void checkConnection(ConnectionProxy connection, long takeTime) {
+		private void checkConnection(ConnectionProxy connection, long takeTime) throws SQLException {
 			long timeOfOccupation = System.currentTimeMillis() - takeTime;
+			if (timeOfOccupation >= TimeUnit.MINUTES.toMillis(MAX_SECONDS_OF_CONNECTION_OCCUPATION) && !connection.isClosed()) {
+				connection.realClose();
+			}
 		}
 		
 	}
