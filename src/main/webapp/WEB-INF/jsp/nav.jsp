@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
     
 <fmt:setLocale value="${sessionScope.locale}"/>	
 	<fmt:bundle basename="localization.local" prefix = "navbar.">
@@ -26,7 +28,7 @@
         <ul class="navbar-nav navbar-right">
         	<c:if test="${userName != null}">
         		<li class="nav-item active">
-            	<a class="nav-link" href="<c:url value='#'/>">${userName}</a>
+            	<a class="nav-link" href="${contextPath}/controller/profile">${userName}</a>
 	         	</li>
 	         	<li class="nav-item active">
 	            	<a class="nav-link" href="<c:url value='logout'/>">${logout}</a>

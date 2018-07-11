@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epam.periodicials_site.entity.User;
+import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.UserService;
 import by.epam.periodicials_site.web.command.Command;
@@ -24,9 +25,15 @@ public class RegisterCommand implements Command {
 		if (!referPage.endsWith(COMMAND_REGISTER)) {
 			request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
 		} else {
+			
 			User user = formUser(request);
-			userService.registerUser(user);
-			response.sendRedirect(request.getContextPath() + "/controller" + COMMAND_HOME);
+			try {
+				userService.registerUser(user);
+				response.sendRedirect(request.getContextPath() + "/controller" + COMMAND_LOGIN);
+			} catch (ServiceException e) {
+				// TODO logger
+				response.sendRedirect(request.getContextPath() + "/controller" + COMMAND_REGISTER);
+			}			
 		}
 	}
 	

@@ -29,10 +29,9 @@ public class FrontController extends HttpServlet {
 	}
 	
 	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String commandName = request.getPathInfo();
-		Command command = CommandProvider.defineCommand(commandName);
-		if (command == null) request.getRequestDispatcher("/index.jsp").forward(request, response);
-		else command.execute(request, response);
+		String path = request.getPathInfo();
+		Command command = CommandProvider.defineCommand(path);
+		command.execute(request, response);
 	}
 
 }

@@ -14,7 +14,7 @@
 	<fmt:message key="placeholder_surname" var="placeholder_surname"/>
 	<fmt:message key="placeholder_email" var="placeholder_email"/>
 	<fmt:message key="button_register" var="button_register"/>
-	<fmt:message key="link_login" var="link_register"/>
+	<fmt:message key="link_login" var="link_login"/>
 </fmt:bundle>
 
 <!DOCTYPE html>
@@ -22,21 +22,21 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>${title}</title>
-		<link href="<c:url value="/resources/css/login.css" />" rel="stylesheet" />
+		<link href="<c:url value="/resources/css/register.css" />" rel="stylesheet" />
 		<link href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" rel="stylesheet"> 
 	</head>
 <body>
 
 	<%@include file="nav.jsp" %>
 	
-	<form action="<c:url value="login" />" id="login" method="post">
+	<form action="<c:url value="register" />" id="login" method="post">
 	    <h1>${main_header}</h1>
 	    <fieldset id="inputs">
 	        <input id="username" name="login" type="text" placeholder="${placeholder_login}" required autofocus />   
 	        <input  id="password" name="password" type="password" placeholder="${placeholder_password}" required />
-	        <input  id="password" name="name" type="text" placeholder="${placeholder_name}" required />
-	        <input  id="password" name="surName" type="text" placeholder="${placeholder_surname}" required />
-	        <input  id="password" name="email" type="text" placeholder="${placeholder_email}" required />
+	        <input  name="name" type="text" placeholder="${placeholder_name}" required />
+	        <input  name="surName" type="text" placeholder="${placeholder_surname}" required />
+	        <input  name="email" type="text" placeholder="${placeholder_email}" required />
 	    </fieldset>
 	    <fieldset id="actions">
 	        <input type="submit" id="submit" value="${button_register}">

@@ -27,17 +27,20 @@ public class LoginCommand implements Command {
 		if (!referPage.endsWith(COMMAND_LOGIN)) {
 			request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
 		} else {
+			
 			String loginOrEmail = request.getParameter(REQUEST_PARAM_LOGIN_OR_EMAIL);
 			String password = request.getParameter(REQUEST_PARAM_PASSWORD);
 			User user = userService.getUser(loginOrEmail, password);
+			
 			if (user == null) {
-				request.setAttribute(REQUEST_ATTR_MSG_LOGIN_FAIL, "true");
+				request.setAttribute(REQUEST_ATTR_MSG_LOGIN_FAIL, "");
 				request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
 			} else {
 				HttpSession session = request.getSession();
 				session.setAttribute(SESSION_ATTR_USER_ID, user.getId());
 				session.setAttribute(SESSION_ATTR_USER_NAME, user.getName());
-				response.sendRedirect(request.getContextPath() + "/controller" + COMMAND_HOME);
+				session.setAttribute(SESSION_ATTR_USER_ROLE, user.getRole());
+				response.sendRedirect(HttpUtil.formRedirectUrl(request, COMMAND_HOME));
 			}
 		}
 	}

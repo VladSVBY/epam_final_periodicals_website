@@ -10,6 +10,8 @@ public final class HttpUtil {
 	
 	private HttpUtil() {}
 	
+	private static final String CONTROLLER_PATTERN = "/controller";
+	
 	public static String getReferPage(HttpServletRequest request) {
 		return request.getHeader(REQUEST_HEADER_REFER_PAGE);
 	}
@@ -24,6 +26,10 @@ public final class HttpUtil {
 		} catch (Exception e) {
 			return LocaleType.EN_US;
 		}
+	}
+	
+	public static String formRedirectUrl(HttpServletRequest request, String command) {
+		return request.getContextPath() + CONTROLLER_PATTERN + command;
 	}
 
 }

@@ -21,6 +21,7 @@ public class LogoutCommand implements Command {
 		HttpSession session = request.getSession();
 		session.removeAttribute(SESSION_ATTR_USER_ID);
 		session.removeAttribute(SESSION_ATTR_USER_NAME);
+		session.removeAttribute(SESSION_ATTR_USER_ROLE);
 		response.sendRedirect(referPage);
 	}
 	

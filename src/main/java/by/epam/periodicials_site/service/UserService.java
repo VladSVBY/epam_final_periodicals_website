@@ -6,5 +6,7 @@ public interface UserService {
 
 	User getUser(String loginOrEmail, String password);
 	
-	void registerUser(User user);
+	User getUser(int userId);
+	
+	void registerUser(User user) throws ServiceException;
 }
