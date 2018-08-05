@@ -23,7 +23,7 @@ public final class HttpUtil {
 		}
 		try {
 			return LocaleType.valueOf(localeName.toUpperCase());
-		} catch (Exception e) {
+		} catch (IllegalArgumentException e) {
 			return LocaleType.EN_US;
 		}
 	}

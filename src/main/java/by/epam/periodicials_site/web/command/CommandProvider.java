@@ -11,6 +11,7 @@ import by.epam.periodicials_site.web.command.impl.HomeCommand;
 import by.epam.periodicials_site.web.command.impl.LoginCommand;
 import by.epam.periodicials_site.web.command.impl.LogoutCommand;
 import by.epam.periodicials_site.web.command.impl.RegisterCommand;
+import by.epam.periodicials_site.web.command.impl.ReplenishBalanceCommand;
 import by.epam.periodicials_site.web.command.impl.ShowPublicationCommand;
 import by.epam.periodicials_site.web.command.impl.TerminateSubscriptionCommand;
 import by.epam.periodicials_site.web.command.impl.UserActiveSubscriptionsCommand;
@@ -36,6 +37,7 @@ public final class CommandProvider {
 		commands.put(COMMAND_TERMINATE_SUBSCRIPTION, new TerminateSubscriptionCommand());
 		commands.put(COMMAND_SHOW_PUBLICATION, new ShowPublicationCommand());
 		commands.put(COMMAND_ADD_REVIEW, new AddReviewCommand());
+		commands.put(COMMAND_REPLENISH_BALANCE, new ReplenishBalanceCommand());
 	}
 	
 	public static Command defineCommand(String commandName) {

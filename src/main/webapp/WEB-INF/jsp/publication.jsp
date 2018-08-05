@@ -3,7 +3,7 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="paginator" uri="http://corporation.com/custom-tag/paginator"%>
+<%@ page import ="by.epam.periodicials_site.entity.Role" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
 <fmt:bundle basename="localization.local" prefix = "home.">
@@ -20,30 +20,38 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>${title}</title>
 		<link href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" rel="stylesheet">
-		
+		<link href="<c:url value="/resources/css/publication_page.css" />" rel="stylesheet">
 	</head>
 <body>
 	
 	<%@include file="nav.jsp" %>
+	
 	<div class="content">
 		<div class="center">
 			<div id="publication">
-				<p> Издание: <b>${publication.name}</b></p>
-				<p> Рейтинг: <b>${publication.rating}</b></p>
-				<p>${publication.description}</p>
-				<p>Цена: <b>${publication.price} руб/мес</b><br>
-			</div>
-			<div id="subscription">
-				<hr>
-					<c:if test="${user_role == Role.CUSTOMER}">
+				<img src="<c:url value="/resources/img/14454972910.jpg" />" id="picture"/>
+				<div id="description">
+					<p> Издание: <b>${publication.name}</b></p>
+					<p> Рейтинг: <b>${publication.rating}</b></p>
+					<p>${publication.description}</p>
+					<p>Цена: <b>${publication.price} руб/мес</b><br>
+				</div>
+			</div>	
+			<div id="subscription">				
+					<%-- <c:if test="${userRole.equals(Role.CUSTOMER)}">
+						<hr>
 						Оформите подписку:
 						<input type="month" />
-					</c:if>
-					
-				<hr>
+						<hr>
+					</c:if> --%>	
+					<c:if test="${userRole == null}">
+						<hr>
+						Войдите, чтобы оставить отзыв
+					</c:if>						
 			</div>
 			<div id="reviews">
-				<c:if test="${user_role == Role.CUSTOMER || user_role == Role.ADMIN}">
+				<c:if test="${userRole == Role.CUSTOMER || userRole == Role.ADMIN}">
+					<hr>
 					<h3>Оставьте ваш отзыв:</h3>
 					<form action="${contextPath}/controller/add-review" method="post">
 						<input type="hidden" name="id_publication" value="${publication.id}" />

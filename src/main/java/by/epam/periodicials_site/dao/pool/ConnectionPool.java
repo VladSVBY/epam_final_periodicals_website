@@ -15,6 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public final class ConnectionPool {
 	
+	private static ConnectionPool instance;
+	
 	private static final String DB_CONFIG_FILE = "db";
 	private static final String RESOURCE_DRIVER_NAME = "db.driver";
 	private static final String RESOURCE_URL = "db.url";
@@ -30,8 +32,6 @@ public final class ConnectionPool {
 	private int minConnectionCount;
 	private final AtomicInteger currentConnectionNumber = new AtomicInteger(0);
 	
-	private static ConnectionPool instance = new ConnectionPool();
-	
 	private BlockingQueue<ConnectionProxy> freeConnections;
 	private ConcurrentHashMap<ConnectionProxy, Long> occupiedConnections;
 	private PoolChecker poolChecker;
@@ -46,6 +46,12 @@ public final class ConnectionPool {
 	
 	public static ConnectionPool getInstance() {
 		return instance;
+	}
+	
+	public static void initialize() {
+		if (instance == null) {
+			instance = new ConnectionPool();
+		}
 	}
 	
 	public Connection getConnection() throws SQLException {

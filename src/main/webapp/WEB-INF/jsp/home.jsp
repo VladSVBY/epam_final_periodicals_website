@@ -3,14 +3,23 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="paginator" uri="http://corporation.com/custom-tag/paginator"%>
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
 <fmt:bundle basename="localization.local" prefix = "home.">
 	<fmt:message key="title" var="title"/>
-	<fmt:message key="type_option" var="title"/>
-	<fmt:message key="theme_option" var="title"/>
-	<fmt:message key="sort_option" var="title"/>
+	<fmt:message key="main_header" var="main_header"/>
+	<fmt:message key="show_button" var="show_button"/>
+	<fmt:message key="theme_option" var="theme_option"/>
+	<fmt:message key="sort_option" var="sort_option"/>
+	<fmt:message key="index_header" var="index_header"/>
+	<fmt:message key="publication_header" var="publication_header"/>
+	<fmt:message key="type_header" var="type_header"/>
+	<fmt:message key="rating_header" var="rating_header"/>
+	<fmt:message key="price_header" var="price_header"/>
+	<fmt:message key="theme_option_all" var="theme_option_all"/>
+	<fmt:message key="sort_option_alphbetically" var="sort_option_alphabetically"/>
+	<fmt:message key="sort_option_rating" var="sort_option_rating"/>
+	<fmt:message key="sort_option_price" var="sort_option_price"/>
 </fmt:bundle>
 
 <!DOCTYPE html>
@@ -27,17 +36,16 @@
 	<%@include file="nav.jsp" %>
 	<div class="content">
 		<div class="left">
-		<form action="${contextPath}/controller/home" method="get"> 
 		  <div class="input-group mb-4">
 			  <div class="input-group-prepend">
-			    <label class="input-group-text" for="inputGroupSelect01">Theme:</label>
+			    <label class="input-group-text" for="inputGroupSelect01">${theme_option}:</label>
 			  </div>			  
-				<select class="custom-select" id="inputGroupSelect01" name="theme">
+				<select class="custom-select" id="theme" name="theme" onchange="goToPage()">
 					<c:if test="${search_criteria.themeId == 0}">
-						<option value="0" selected>All</option>
+						<option value="0" selected>${theme_option_all}</option>
 					</c:if>
 					<c:if test="${search_criteria.themeId != 0}">
-						<option value="0">All</option>
+						<option value="0">${theme_option_all}</option>
 					</c:if>
 				 	<c:forEach items="${themes}" var="theme">
 				 		<c:if test="${search_criteria.themeId == theme.id}">
@@ -51,44 +59,49 @@
 		  </div>
 		  <div class="input-group mb-4">
 			  <div class="input-group-prepend">
-			    <label class="input-group-text" for="inputGroupSelect02">Sort by:</label>
+			    <label class="input-group-text" for="inputGroupSelect02">${sort_option}:</label>
 			  </div>			  
-				<select class="custom-select" id="inputGroupSelect02" name="order">
+				<select class="custom-select" id="order" name="order" onchange="goToPage()">
 					<c:if test="${search_criteria.orderId == 1}">
-						<option value="1" selected>Alphabetically</option>
+						<option value="1" selected>${sort_option_alphabetically}</option>
 					</c:if>
 					<c:if test="${search_criteria.orderId != 1}">
-						<option value="1">Alphabetically</option>
+						<option value="1">${sort_option_alphabetically}</option>
 					</c:if>
 					<c:if test="${search_criteria.orderId == 2}">
-						<option value="2" selected>Price</option>>
+						<option value="2" selected>${sort_option_price}</option>>
 					</c:if>
 					<c:if test="${search_criteria.orderId != 2}">
-						<option value="2">Price</option>
+						<option value="2">${sort_option_price}</option>
 					</c:if>
 					<c:if test="${search_criteria.orderId == 3}">
-						<option value="3" selected>Rating</option>
+						<option value="3" selected>${sort_option_rating}</option>
 					</c:if>
 					<c:if test="${search_criteria.orderId != 3}">
-						<option value="3">Rating</option>
+						<option value="3">${sort_option_rating}</option>
 					</c:if>
 				</select>
 		  </div>
-		  <button type="submit">Show</button>
-		  </form>
 		</div>
 		<div class="right">
+			<h2>${main_header}</h2>
 	      <ul class="list-group">
 	      <li class="list-group-item">
 	      	<div class="row">
 	      		<div class=col-md-1>
-	                        Индекс
+	                        ${index_header}
 	                    </div>
-	                    <div class=col-md-2>
-	                        Индекс
+	                    <div class=col-md-4>
+	                        ${publication_header}
 	                    </div>
 	                    <div class=col-md-1>
-	                        Индекс
+	                        ${type_header}
+	                    </div>
+	                    <div class=col-md-1>
+	                        ${rating_header}
+	                    </div>
+	                    <div class=col-md-1>
+	                        ${price_header}
 	                    </div>
 	            </div>
 	       </li>
@@ -102,6 +115,9 @@
 	                        ${publication.name}
 	                    </div>
 	                    <div class=col-md-1>
+	                        ${typeNames.get(publucation.id)}
+	                    </div>
+	                    <div class=col-md-1>
 	                        ${publication.price}
 	                    </div>
 	                    <div class=col-md-1>
@@ -113,5 +129,15 @@
 			</ul>
 		</div>
 	</div>
+	
+	<script type= "text/javascript">
+		function goToPage()
+			{
+				var theme = document.getElementById("theme").value;
+				var order = document.getElementById("order").value;
+				document.location.href = '${contextPath}/controller/home?theme=' + theme + '&order=' + order;
+			}
+	</script>
+	
 </body>
 </html>

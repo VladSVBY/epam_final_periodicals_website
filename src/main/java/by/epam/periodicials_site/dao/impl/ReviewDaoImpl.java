@@ -1,13 +1,13 @@
 package by.epam.periodicials_site.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import by.epam.periodicials_site.dao.DaoException;
@@ -19,7 +19,7 @@ public class ReviewDaoImpl implements ReviewDao{
 	
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 	
-	private static final String READ_REVIEWS_FOR_PUBLICATION = "SELECT id, id_user, id_publication, date_of_publication, text, mark FROM reviews WHERE id_publication=? ORDER BY date_of_publication";
+	private static final String READ_REVIEWS_FOR_PUBLICATION = "SELECT id, id_user, id_publication, date_of_publication, text, mark FROM reviews WHERE id_publication=? ORDER BY date_of_publication DESC";
 	private static final String INSERT_REVIEW = "INSERT INTO `periodicals_website`.`reviews` (`id_user`, `id_publication`, `date_of_publication`, `text`, `mark`) VALUES (?, ?, ?, ?, ?);";
 	
 	private static final String ID = "id";
@@ -43,7 +43,6 @@ public class ReviewDaoImpl implements ReviewDao{
 				reviews.add(review);
 			}
 		} catch (SQLException e) {
-			// TODO logger
 			throw new DaoException("Exception reading reviews", e);
 		}
 		return reviews;
@@ -62,7 +61,6 @@ public class ReviewDaoImpl implements ReviewDao{
 			
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			// TODO logger
 			throw new DaoException("Exception creating review", e);
 		}
 	}

@@ -25,7 +25,7 @@ public class BalnceOperationDaoImpl implements BalanceOperationDao{
 	
 	private UserDao userDao = DaoFactory.getUserDao();
 	
-	private static final String READ_USER_BALANCE_OPERATIONS = "SELECT id, id_user, date, sum, type FROM balance_operations WHERE id_user=?";
+	private static final String READ_USER_BALANCE_OPERATIONS = "SELECT id, id_user, date, sum, type FROM balance_operations WHERE id_user=? ORDER BY date DESC";
 	private static final String CREATE_BALANCE_OPERATION = "INSERT INTO `periodicals_website`.`balance_operations` (`id_user`, `date`, `sum`, `type`) VALUES (?, ?, ?, ?)";
 	
 	private static final String ID = "id";
@@ -65,8 +65,12 @@ public class BalnceOperationDaoImpl implements BalanceOperationDao{
 			ps.setDouble(3, balanceOperation.getSum());
 			ps.setString(4, balanceOperation.getType().name());
 			
-			int result = ps.executeUpdate();
-			userDao.addToBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
+			ps.executeUpdate();
+			if (balanceOperation.getType() == BalanceOperationType.PAYMENT_OF_SUBSCRIPTION) {
+				userDao.removeFromBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
+			} else {
+				userDao.addToBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
+			}
 			connection.commit();
 			 
 		} catch (SQLException e) {
@@ -96,7 +100,7 @@ public class BalnceOperationDaoImpl implements BalanceOperationDao{
 		BalanceOperation balanceOperation = new BalanceOperation();
 		balanceOperation.setId(resultSet.getInt(ID));
 		balanceOperation.setIdUser(resultSet.getInt(USER_ID));
-		balanceOperation.setDate(new Date(resultSet.getTimestamp(DATE).getTime()));
+		balanceOperation.setDate(resultSet.getDate(""));
 		balanceOperation.setSum(resultSet.getDouble(SUM));
 		balanceOperation.setType(BalanceOperationType.valueOf(resultSet.getString(TYPE)));
 		return balanceOperation;

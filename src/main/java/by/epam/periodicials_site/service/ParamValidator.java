@@ -4,12 +4,13 @@ import by.epam.periodicials_site.entity.User;
 
 public final class ParamValidator {
 	
-	public static void validateUserParams(User user) throws ServiceException {
-		if (user.getLogin() == null) throw new ServiceException("Login can't be null");
-		if (user.getPassword() == null) throw new ServiceException("Password can't be null");
-		if (user.getName() == null) throw new ServiceException("Name can't be null");
-		if (user.getSurName() == null) throw new ServiceException("Surname can't be null");
-		if (user.getEmail() == null) throw new ServiceException("Email can't be null");
+	public static boolean validateUserParams(User user){
+		if (user.getLogin() == null || "".equals(user.getLogin())) return false;
+		if (user.getPassword() == null || "".equals(user.getPassword())) return false;
+		if (user.getName() == null || "".equals(user.getName())) return false;
+		if (user.getSurName() == null || "".equals(user.getSurName())) return false;
+		if (user.getEmail() == null || "".equals(user.getEmail())) return false;
+		return true;
 	}
 
 }

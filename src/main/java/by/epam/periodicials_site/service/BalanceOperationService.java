@@ -7,5 +7,7 @@ import by.epam.periodicials_site.entity.BalanceOperation;
 public interface BalanceOperationService {
 	
 	List<BalanceOperation> readForUser(int userID) throws ServiceException;
+	
+	void create(BalanceOperation balanceOperation) throws ServiceException;
 
 }

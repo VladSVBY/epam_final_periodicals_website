@@ -19,12 +19,12 @@ public class UserDaoImpl implements UserDao{
 	private static final String READ_USER_WITH_ID = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE users.id=?";
 	private static final String CREATE_USER = "INSERT INTO `periodicals_website`.`users` (`login`, `password`, `name`, `surname`, `email`) VALUES (?, ?, ?, ?, ?)";
 	private static final String ADD_TO_USER_BALANCE = "UPDATE `periodicals_website`.`users` SET `balance`=(SELECT balance + ? FROM (SELECT balance FROM users WHERE id=?) res) WHERE `id`=?";
-	private static final String REMOVE_FROM_USER_BALANCE = "SELECT @NewBalance = balance - ? FROM users AS res WHERE id=?; UPDATE `periodicals_website`.`users` SET `balance`=NewBalance WHERE `id`=?";
+	private static final String REMOVE_FROM_USER_BALANCE = "SELECT balance - ? FROM users AS res WHERE id=?; UPDATE `periodicals_website`.`users` SET `balance`=NewBalance WHERE `id`=?";
 	
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
-	public void create(User user) {
+	public void create(User user) throws DaoException{
 		try (Connection connection = connectionPool.getConnection(); 
 				PreparedStatement ps = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)){
 			ps.setString(1, user.getLogin());
@@ -40,12 +40,12 @@ public class UserDaoImpl implements UserDao{
 			}
 			
 		} catch (SQLException e) {
-			// TODO logger
+			throw new DaoException("Exception creating user", e);
 		}
 	}
 	
 	@Override
-	public User read(int userId) {
+	public User read(int userId) throws DaoException {
 		try (Connection connection = connectionPool.getConnection(); 
 				PreparedStatement ps = connection.prepareStatement(READ_USER_WITH_ID)){
 			ps.setInt(1, userId);
@@ -55,14 +55,13 @@ public class UserDaoImpl implements UserDao{
 				return createUser(resultSet);
 			}			
 		} catch (SQLException e) {
-			// TODO logger
-			e.printStackTrace();
+			throw new DaoException("Exception reading user", e);
 		}
 		return null;
 	}
 
 	@Override
-	public User readByLoginOrEmailAndPassword(String loginOrEmail, String password) {
+	public User readByLoginOrEmailAndPassword(String loginOrEmail, String password) throws DaoException {
 		try (Connection connection = connectionPool.getConnection(); 
 				PreparedStatement ps = connection.prepareStatement(READ_USER)){
 			ps.setString(1, loginOrEmail);
@@ -73,20 +72,21 @@ public class UserDaoImpl implements UserDao{
 				return createUser(resultSet);
 			}			
 		} catch (SQLException e) {
-			// TODO logger
-			e.printStackTrace();
+			throw new DaoException("Exception reading user", e);
 		}
 		return null;
 	}
 	
 	@Override
-	public void addToBalanceTransaction(int userId, double sum, Connection connection) throws SQLException {
+	public void addToBalanceTransaction(int userId, double sum, Connection connection) throws DaoException {
 		try (PreparedStatement ps = connection.prepareStatement(ADD_TO_USER_BALANCE)){
 			ps.setDouble(1, sum);
 			ps.setInt(2, userId);
 			ps.setInt(3, userId);
 			ps.executeUpdate();
-		}	
+		} catch (SQLException e) {
+			throw new DaoException("Exception adding to user balance", e);
+		}
 	}
 
 	@Override

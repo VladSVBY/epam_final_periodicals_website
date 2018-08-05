@@ -19,10 +19,18 @@ public class BalanceOperationServiceImpl implements BalanceOperationService {
 		try {
 			balanceOperations = balanceOperationDao.readForUser(userID);
 		} catch (DaoException e) {
-			// TODO: logger
 			throw new ServiceException("Exception reading balance operations", e);
 		}
 		return balanceOperations;
+	}
+
+	@Override
+	public void create(BalanceOperation balanceOperation) throws ServiceException {
+		try {
+			balanceOperationDao.create(balanceOperation);
+		} catch (DaoException e) {
+			throw new ServiceException("Exception creating balance operations", e);
+		}
 	}
 
 }

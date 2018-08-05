@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epam.periodicials_site.entity.User;
+import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.UserService;
 import by.epam.periodicials_site.web.command.Command;
@@ -30,7 +31,13 @@ public class LoginCommand implements Command {
 			
 			String loginOrEmail = request.getParameter(REQUEST_PARAM_LOGIN_OR_EMAIL);
 			String password = request.getParameter(REQUEST_PARAM_PASSWORD);
-			User user = userService.getUser(loginOrEmail, password);
+			User user = null;;
+			try {
+				user = userService.getUser(loginOrEmail, password);
+			} catch (ServiceException e) {
+				// logger
+				e.printStackTrace();
+			}
 			
 			if (user == null) {
 				request.setAttribute(REQUEST_ATTR_MSG_LOGIN_FAIL, "");

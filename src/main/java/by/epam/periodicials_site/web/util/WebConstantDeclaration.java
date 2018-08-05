@@ -27,6 +27,7 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_PARAM_REVIEW_TEXT = "text";
 	public static final String REQUEST_PARAM_REVIEW_MARK = "mark";
 	public static final String REQUEST_PARAM_REVIEW_ID_OF_PUBLICATION = "id_publication";
+	public static final String REQUEST_PARAM_SUM_FOR_REPLENISHMENT = "sum";
 	
 	public static final String SESSION_ATTR_LOCALE = "locale";
 	public static final String SESSION_ATTR_REFER_PAGE = "referPage";
@@ -60,5 +61,6 @@ public final class WebConstantDeclaration {
 	public static final String COMMAND_TERMINATE_SUBSCRIPTION = "/terminate-subscription";
 	public static final String COMMAND_SHOW_PUBLICATION = "/publication";
 	public static final String COMMAND_ADD_REVIEW = "/add-review";
+	public static final String COMMAND_REPLENISH_BALANCE = "/replenish-balance";
 	
 }

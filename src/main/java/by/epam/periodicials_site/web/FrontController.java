@@ -7,16 +7,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.epam.periodicials_site.dao.pool.ConnectionPool;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.command.CommandProvider;
 
 public class FrontController extends HttpServlet {
-	
+
 	private static final long serialVersionUID = -648733403178379343L;
 
     public FrontController() {
         super();
     }
+    
+    @Override
+	public void init() throws ServletException {
+		ConnectionPool.initialize();
+		super.init();
+	}
 
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
