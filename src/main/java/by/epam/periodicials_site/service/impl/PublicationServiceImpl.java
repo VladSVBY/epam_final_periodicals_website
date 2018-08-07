@@ -8,8 +8,10 @@ import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.dao.PublicationDao;
 import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.Publication;
+import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.entity.dto.PublicationSearchCriteria;
 import by.epam.periodicials_site.service.PublicationService;
+import by.epam.periodicials_site.service.ServiceException;
 
 public class PublicationServiceImpl implements PublicationService{
 	
@@ -21,7 +23,6 @@ public class PublicationServiceImpl implements PublicationService{
 		try {
 			publications = publicationDao.readAll(criteria);
 		} catch (DaoException e) {
-			// TODO logger
 			e.printStackTrace();
 		}
 		return publications;
@@ -32,10 +33,38 @@ public class PublicationServiceImpl implements PublicationService{
 		try {
 			return publicationDao.read(id, locale);
 		} catch (DaoException e) {
-			// TODO logger
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void add(LocalizedPublication localizedPublication) throws ServiceException {
+		try {
+			publicationDao.create(localizedPublication);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+		
+	}
+
+	@Override
+	public LocalizedPublication readLocalized(int id) throws ServiceException {
+		try {
+			return publicationDao.readLocalized(id);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}		
+	}
+
+	@Override
+	public void update(LocalizedPublication localizedPublication) throws ServiceException {
+		try {
+			publicationDao.update(localizedPublication);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+		
 	}
 
 }

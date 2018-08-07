@@ -12,6 +12,7 @@ public final class WebConstantDeclaration {
 	public static final String VIEW_USER_SUBSCRIPTION_HISTORY = "/WEB-INF/jsp/user/subscription_history.jsp";
 	public static final String VIEW_USER_BALANCE_OPERATION_HISTORY = "/WEB-INF/jsp/user/balance_operation_history.jsp";
 	public static final String VIEW_PUBLICATION_DETAILS = "/WEB-INF/jsp/publication.jsp";
+	public static final String VIEW_ADD_PUBLICATION_FORM = "/WEB-INF/jsp/admin/add_publication_form.jsp";
 	
 	public static final String REQUEST_PARAM_LOGIN_OR_EMAIL = "login_or_email";
 	public static final String REQUEST_PARAM_PASSWORD = "password";

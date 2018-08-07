@@ -14,6 +14,7 @@ public class Publication implements Serializable{
 	private short typeID;
 	private double price;
 	private double rating;
+	private String picturePath;
 	
 	public Publication() {
 		super();
@@ -81,6 +82,14 @@ public class Publication implements Serializable{
 
 	public void setRating(double rating) {
 		this.rating = rating;
+	}
+
+	public String getPicturePath() {
+		return picturePath;
+	}
+
+	public void setPicturePath(String picturePath) {
+		this.picturePath = picturePath;
 	}
 
 	@Override

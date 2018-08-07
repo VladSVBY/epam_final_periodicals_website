@@ -6,11 +6,14 @@
 <%@ page import ="by.epam.periodicials_site.entity.Role" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
-<fmt:bundle basename="localization.local" prefix = "home.">
-	<fmt:message key="title" var="title"/>
-	<fmt:message key="type_option" var="title"/>
-	<fmt:message key="theme_option" var="title"/>
-	<fmt:message key="sort_option" var="title"/>
+<fmt:bundle basename="localization.local" prefix = "publication_page.">
+	<fmt:message key="publication" var="publication_header"/>
+	<fmt:message key="theme" var="theme_header"/>
+	<fmt:message key="type" var="type_header"/>
+	<fmt:message key="price" var="price_header"/>
+	<fmt:message key="rating" var="rating_header"/>
+	<fmt:message key="login_message" var="login_message"/>
+	<fmt:message key="money_per_month" var="money_per_month"/>
 </fmt:bundle>
 
 <!DOCTYPE html>
@@ -18,7 +21,7 @@
 	<head>
 		<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>${title}</title>
+		<title>${publication.name}</title>
 		<link href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" rel="stylesheet">
 		<link href="<c:url value="/resources/css/publication_page.css" />" rel="stylesheet">
 	</head>
@@ -29,25 +32,58 @@
 	<div class="content">
 		<div class="center">
 			<div id="publication">
-				<img src="<c:url value="/resources/img/14454972910.jpg" />" id="picture"/>
+				<img src="<c:url value="/resources/img/${publication.picturePath}" />" id="picture"/>
 				<div id="description">
-					<p> Издание: <b>${publication.name}</b></p>
-					<p> Рейтинг: <b>${publication.rating}</b></p>
+					<p><b>${publication_header}:</b> ${publication.name}</p>
+					<p><b>${theme_header}:</b> ${publication.name}</p>
+					<p><b>${type_header}:</b> ${publication.name}</p>
+					<p><b>${rating_header}:</b> ${publication.rating}</p>
 					<p>${publication.description}</p>
-					<p>Цена: <b>${publication.price} руб/мес</b><br>
+					<p><b>${price_header}:</b> ${publication.price} ${money_per_month}</p>
 				</div>
 			</div>	
-			<div id="subscription">				
-					<%-- <c:if test="${userRole.equals(Role.CUSTOMER)}">
-						<hr>
-						Оформите подписку:
-						<input type="month" />
-						<hr>
-					</c:if> --%>	
+			<div id="subscription">					
 					<c:if test="${userRole == null}">
 						<hr>
-						Войдите, чтобы оставить отзыв
-					</c:if>						
+						${login_message}
+					</c:if>
+					<c:if test="${userRole == Role.CUSTOMER}">
+						<hr>
+						Subscribe now:<br>
+						<div class="input-group mb-2" >
+						  <div class="input-group-prepend">
+						    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+						  </div>
+						  <select class="custom-select" name="mark">
+						    <option value="0">0</option>
+						    <option value="1">1</option>
+						    <option value="2">2</option>
+						    <option value="3">3</option>
+						    <option value="4">4</option>
+						    <option value="5">5</option>
+						  </select>
+						</div>
+						<div class="input-group mb-2" >
+						  <div class="input-group-prepend">
+						    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+						  </div>
+						  <select class="custom-select" name="duration" id="duration" onchange="countPrice()">
+						    <option value="1">1</option>
+						    <option value="2">2</option>
+						    <option value="3">3</option>
+						    <option value="4">4</option>
+						    <option value="5">5</option>
+						    <option value="6">6</option>
+						    <option value="7">7</option>
+						    <option value="8">8</option>
+						    <option value="9">9</option>
+						    <option value="10">10</option>
+						    <option value="11">11</option>
+						    <option value="12">12</option>
+						  </select>
+						</div>
+						<div>Price: <span id="total_price"></span></div>
+					</c:if>					
 			</div>
 			<div id="reviews">
 				<c:if test="${userRole == Role.CUSTOMER || userRole == Role.ADMIN}">
@@ -80,7 +116,7 @@
 				<hr>
 				<h2>Отзывы:</h2>
 				<c:forEach items="${reviews}" var="review">
-					<b>${review.dateOfPublication}</b><br>
+					<b><fmt:formatDate value="${review.dateOfPublication}" pattern="yyyy-MM-dd HH:mm" /></b><br>
 					Оценка: ${review.mark}<br>
 					${review.text}<br>
 					<hr>
@@ -88,5 +124,14 @@
 			</div>
 		</div>
 	</div>
+	
+	<script type= "text/javascript">
+		function countPrice()
+			{
+				var price = ${publication.price};
+				var duration = document.getElementById("duration").value;
+				document.getElementById("total_price").innerText = price * duration;
+			}
+	</script>
 </body>
 </html>

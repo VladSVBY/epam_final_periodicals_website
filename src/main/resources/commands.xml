@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<commands>
+	
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.HomeCommand</class>
+		<url-pattern>/home</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.LoginCommand</class>
+		<url-pattern>/login</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.LogoutCommand</class>
+		<url-pattern>/logout</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.RegisterCommand</class>
+		<url-pattern>/register</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.ChangeLocaleCommand</class>
+		<url-pattern>/change-locale</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.ShowPublicationCommand</class>
+		<url-pattern>/publication</url-pattern>
+	</command>
+	
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.AddPublicationCommand</class>
+		<url-pattern>/admin/add-publication</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.GetAddPublicationFormCommand</class>
+		<url-pattern>/admin/add-publication-form</url-pattern>
+	</command>
+	
+</commands>

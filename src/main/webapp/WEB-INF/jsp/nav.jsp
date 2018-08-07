@@ -43,10 +43,10 @@
 	         	</li>
          	</c:if>
         	<li class="nav-item active">
-            	<a class="nav-link" style="color: white" href="<c:url value='change-locale?locale=ru_BY'/>">RU</a>
+            	<a class="nav-link" style="color: white" href="${contextPath}/controller/change-locale?locale=ru_BY">RU</a>
           	</li>
           	<li class="nav-item active">
-            	<a class="nav-link" style="color: white" href="<c:url value='change-locale?locale=en_US'/>">EN</a>
+            	<a class="nav-link" style="color: white" href="${contextPath}/controller/change-locale?locale=en_US">EN</a>
           	</li>
         </ul>
       </div>
