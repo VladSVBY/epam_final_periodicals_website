@@ -36,10 +36,10 @@
         	</c:if>
         	<c:if test="${userName == null}">
 	        	<li class="nav-item active">
-	            	<a class="nav-link" href="<c:url value='login'/>">${login}</a>
+	            	<a class="nav-link" href="${contextPath}/controller/login">${login}</a>
 	         	</li>
 	         	<li class="nav-item active">
-	            	<a class="nav-link" href="<c:url value='register'/>">${register}</a>
+	            	<a class="nav-link" href="${contextPath}/controller/register">${register}</a>
 	         	</li>
          	</c:if>
         	<li class="nav-item active">

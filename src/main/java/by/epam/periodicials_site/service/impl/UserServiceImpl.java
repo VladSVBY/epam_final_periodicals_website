@@ -4,9 +4,11 @@ import by.epam.periodicials_site.dao.DaoException;
 import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.dao.UserDao;
 import by.epam.periodicials_site.entity.User;
-import by.epam.periodicials_site.service.ParamValidator;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.UserService;
+import by.epam.periodicials_site.service.exception.EmailAlreadyExistsException;
+import by.epam.periodicials_site.service.exception.LoginAlreadyExistsException;
+import by.epam.periodicials_site.service.exception.ServiceException;
+import by.epam.periodicials_site.service.util.ParamValidator;
 
 public class UserServiceImpl implements UserService{
 	
@@ -24,9 +26,13 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void registerUser(User user) throws ServiceException {
 		try {
-			if(ParamValidator.validateUserParams(user)) {
-				userDao.create(user);
-			}				
+			if (userDao.loginExists(user.getLogin())) {
+				throw new LoginAlreadyExistsException("Login already exists");
+			}
+			if (userDao.emailExists(user.getEmail())) {
+				throw new EmailAlreadyExistsException("Email already exists");
+			}
+			userDao.create(user);			
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}
@@ -40,5 +46,7 @@ public class UserServiceImpl implements UserService{
 			throw new ServiceException(e);
 		}
 	}
+	
+	
 
 }

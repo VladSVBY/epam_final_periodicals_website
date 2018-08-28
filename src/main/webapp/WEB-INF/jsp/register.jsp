@@ -20,6 +20,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>${title}</title>
 		<link href="<c:url value="/resources/css/register.css" />" rel="stylesheet" />
@@ -29,7 +30,7 @@
 
 	<%@include file="nav.jsp" %>
 	
-	<form action="<c:url value="register" />" id="login" method="post">
+	<form action="${contextPath}/controller/register" id="login" method="post" style="top:300px">
 	    <h1>${main_header}</h1>
 	    <fieldset id="inputs">
 	        <input id="username" name="login" type="text" placeholder="${placeholder_login}" required autofocus />   
@@ -38,9 +39,10 @@
 	        <input  name="surName" type="text" placeholder="${placeholder_surname}" required />
 	        <input  name="email" type="text" placeholder="${placeholder_email}" required />
 	    </fieldset>
+	    <p style="color:red">${fail_message}</p>
 	    <fieldset id="actions">
 	        <input type="submit" id="submit" value="${button_register}">
-	        <a href="login">${link_login}</a>
+	        <a href="${contextPath}/controller/login">${link_login}</a>
 	    </fieldset>
 	</form>
 </body>

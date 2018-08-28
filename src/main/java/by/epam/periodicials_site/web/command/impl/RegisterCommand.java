@@ -8,14 +8,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.User;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.UserService;
+import by.epam.periodicials_site.service.exception.EmailAlreadyExistsException;
+import by.epam.periodicials_site.service.exception.LoginAlreadyExistsException;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
+import by.epam.periodicials_site.web.util.MessageResolver;
 
 public class RegisterCommand implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(RegisterCommand.class);
+	
+	private static final String LOGIN_EXISTS_MESSAGE = "register.login_exists";
+	private static final String EMAIL_EXISTS_MESSAGE = "register.email_exists";
 	
 	private UserService userService = ServiceFactory.getUserService();
 
@@ -25,15 +37,27 @@ public class RegisterCommand implements Command {
 		if (!referPage.endsWith(COMMAND_REGISTER)) {
 			request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
 		} else {
-			
-			User user = formUser(request);
+			LocaleType locale = HttpUtil.getLocale(request);
 			try {
+				User user = formUser(request);
 				userService.registerUser(user);
-				response.sendRedirect(request.getContextPath() + "/controller" + COMMAND_LOGIN);
-			} catch (ServiceException e) {
-				// TODO logger
-				response.sendRedirect(request.getContextPath() + "/controller" + COMMAND_REGISTER);
-			}			
+				response.sendRedirect(HttpUtil.formRedirectUrl(request, COMMAND_LOGIN));
+				
+			} catch (LoginAlreadyExistsException e) {
+				String message = MessageResolver.getMessage(LOGIN_EXISTS_MESSAGE, locale);
+				request.setAttribute(FAIL_MESSAGE, message);
+				request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
+				
+			} catch (EmailAlreadyExistsException e) {
+				String message = MessageResolver.getMessage(EMAIL_EXISTS_MESSAGE, locale);
+				request.setAttribute(FAIL_MESSAGE, message);
+				request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
+			}
+			
+			catch (ServiceException e) {
+				logger.error("Exception registrating user", e);
+				request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
+			}	
 		}
 	}
 	

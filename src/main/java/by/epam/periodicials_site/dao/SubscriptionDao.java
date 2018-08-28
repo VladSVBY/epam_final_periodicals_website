@@ -7,6 +7,8 @@ import by.epam.periodicials_site.entity.Subscription;
 
 public interface SubscriptionDao {
 	
+	void create(Subscription subscription, BalanceOperation balanceOperation) throws DaoException;
+	
 	void update(Subscription subscription) throws DaoException;
 	
 	Subscription read(int subscriptionId) throws DaoException;

@@ -1,6 +1,7 @@
 package by.epam.periodicials_site.dao;
 
 import by.epam.periodicials_site.dao.impl.BalnceOperationDaoImpl;
+import by.epam.periodicials_site.dao.impl.IssueDaoImpl;
 import by.epam.periodicials_site.dao.impl.PublicationDaoImpl;
 import by.epam.periodicials_site.dao.impl.ReviewDaoImpl;
 import by.epam.periodicials_site.dao.impl.SubscriptionDaoImpl;
@@ -17,6 +18,7 @@ public final class DaoFactory {
 	private static final PublicationDao PUBLICATION_DAO = new PublicationDaoImpl();
 	private static final SubscriptionDao SUBSCRIPTION_DAO = new SubscriptionDaoImpl();
 	private static final ReviewDao REVIEW_DAO = new ReviewDaoImpl();
+	private static final IssueDao ISSUE_DAO = new IssueDaoImpl();
 	
 	public static UserDao getUserDao() {
 		return USER_DAO;
@@ -40,6 +42,10 @@ public final class DaoFactory {
 
 	public static ThemeDao getThemeDao() {
 		return THEME_DAO;
+	}
+
+	public static IssueDao getIssueDao() {
+		return ISSUE_DAO;
 	}
 	
 	

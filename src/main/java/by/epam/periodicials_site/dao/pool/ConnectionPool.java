@@ -2,6 +2,7 @@ package by.epam.periodicials_site.dao.pool;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -71,9 +72,36 @@ public final class ConnectionPool {
 		freeConnections.offer(connection);
 	}
 	
+	public void closeDbResources(Connection connection, PreparedStatement... preparedStatements) throws SQLException {
+		if (connection instanceof ConnectionProxy) {
+			releaseConnection((ConnectionProxy) connection);
+		}
+		for (PreparedStatement pStatement : preparedStatements) {
+			if (pStatement != null) {
+				pStatement.close();
+			}
+		}
+	}
+	
+	public void rollBack(Connection connection) throws SQLException {
+		if (connection != null) {
+			connection.rollback();
+		}
+	}
+	
 	public void destroy() {
-		//poolChecker.stopWork();
 		poolChecker.interrupt();
+		try {
+		for (ConnectionProxy connection : freeConnections) {
+				connection.realClose();		
+		}
+		for (Map.Entry<ConnectionProxy, Long> entry : occupiedConnections.entrySet()) {
+			entry.getKey().realClose();		
+	}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadDBPropertiesAndRegisterDriver() {

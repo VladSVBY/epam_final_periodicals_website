@@ -1,13 +1,16 @@
 package by.epam.periodicials_site.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.mysql.cj.api.jdbc.Statement;
 
@@ -20,6 +23,8 @@ import by.epam.periodicials_site.entity.BalanceOperation;
 import by.epam.periodicials_site.entity.BalanceOperationType;
 
 public class BalnceOperationDaoImpl implements BalanceOperationDao{
+	
+	private static final Logger logger = LogManager.getLogger(BalanceOperation.class);
 	
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 	
@@ -48,7 +53,6 @@ public class BalnceOperationDaoImpl implements BalanceOperationDao{
 				balanceOperations.add(balanceOperation);
 			}
 		} catch (SQLException e) {
-			// TODO logger
 			throw new DaoException("Exception reading balance operations", e);
 		}
 		return balanceOperations;
@@ -56,53 +60,76 @@ public class BalnceOperationDaoImpl implements BalanceOperationDao{
 	
 	@Override
 	public void create(BalanceOperation balanceOperation) throws DaoException {
-		try (Connection connection = connectionPool.getConnection(); 
-				PreparedStatement ps = connection.prepareStatement(CREATE_BALANCE_OPERATION, Statement.RETURN_GENERATED_KEYS)
-		){
+		Connection connection = null;
+		PreparedStatement ps = null;
+		try {
+			connection = connectionPool.getConnection();
+			ps = connection.prepareStatement(CREATE_BALANCE_OPERATION, Statement.RETURN_GENERATED_KEYS);
 			connection.setAutoCommit(false);
+			
 			ps.setInt(1, balanceOperation.getIdUser());
 			ps.setTimestamp(2, new Timestamp(balanceOperation.getDate().getTime()));
 			ps.setDouble(3, balanceOperation.getSum());
 			ps.setString(4, balanceOperation.getType().name());
-			
+			System.out.println("hello");
 			ps.executeUpdate();
 			if (balanceOperation.getType() == BalanceOperationType.PAYMENT_OF_SUBSCRIPTION) {
 				userDao.removeFromBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
 			} else {
+				System.out.println("hello");
 				userDao.addToBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
 			}
-			connection.commit();
-			 
+			connection.commit();			 
 		} catch (SQLException e) {
-			// TODO logger
+			try {
+					connectionPool.rollBack(connection);
+			} catch (SQLException e1) {
+				throw new DaoException("Exception rollbacking balance operation", e1);
+			}
 			throw new DaoException("Exception creating balance operation", e);
+		} finally {
+			try {
+				connectionPool.closeDbResources(connection, ps);
+			} catch (SQLException e) {
+				logger.warn("Closing of DB resources failed", e);
+			}
 		}
 	}
 
 	@Override
 	public void createTransaction(BalanceOperation balanceOperation, Connection connection) throws DaoException {
-		try (PreparedStatement ps = connection.prepareStatement(CREATE_BALANCE_OPERATION, Statement.RETURN_GENERATED_KEYS)
+		try (PreparedStatement ps = connection.prepareStatement(CREATE_BALANCE_OPERATION,
+				Statement.RETURN_GENERATED_KEYS)
 		){
 			ps.setInt(1, balanceOperation.getIdUser());
 			ps.setTimestamp(2, new Timestamp(balanceOperation.getDate().getTime()));
 			ps.setDouble(3, balanceOperation.getSum());
 			ps.setString(4, balanceOperation.getType().name());
 			
-			int result = ps.executeUpdate();
-			userDao.addToBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
+			if (ps.executeUpdate() > 0) {
+				ResultSet resultSet = ps.getGeneratedKeys();
+				resultSet.next();
+				balanceOperation.setId(resultSet.getInt(1));
+			}
+			if (balanceOperation.getType() == BalanceOperationType.PAYMENT_OF_SUBSCRIPTION) {
+				userDao.removeFromBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
+			} else {
+				userDao.addToBalanceTransaction(balanceOperation.getIdUser(), balanceOperation.getSum(), connection);
+			}
 		} catch (SQLException e) {
-			// TODO logger
-			throw new DaoException("Exception creating balance operation", e);
+			throw new DaoException("Exception creating balance operation transaction", e);
 		}
 	}
 	
 	private BalanceOperation formBalanceOpertion(ResultSet resultSet) throws SQLException {
 		BalanceOperation balanceOperation = new BalanceOperation();
+		
 		balanceOperation.setId(resultSet.getInt(ID));
 		balanceOperation.setIdUser(resultSet.getInt(USER_ID));
-		balanceOperation.setDate(resultSet.getDate(""));
+		balanceOperation.setDate(resultSet.getDate(DATE));
 		balanceOperation.setSum(resultSet.getDouble(SUM));
 		balanceOperation.setType(BalanceOperationType.valueOf(resultSet.getString(TYPE)));
+		
 		return balanceOperation;
 	}
 

@@ -9,5 +9,11 @@ public interface ReviewDao {
 	List<Review> readForPublication(int publicationId) throws DaoException;
 	
 	void create(Review review) throws DaoException;
+	
+	void update(Review review) throws DaoException;
+	
+	void delete(int id) throws DaoException;
+	
+	Review read(int id) throws DaoException;
 
 }

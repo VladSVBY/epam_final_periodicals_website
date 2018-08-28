@@ -8,9 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.UserService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 
 public class UserProfileCommand implements Command {

@@ -82,6 +82,7 @@
                   <th>${end_date_header}</th>
                   <th>${price_header}</th>
                   <th>${actions_header}</th>
+                  <th>${actions_header}</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,7 +93,7 @@
 		                <td>${subscription.startDate}</td>
 		                <td>${subscription.endDate}</td>
 		                <td>${subscription.price}</td>
-		                <c:if test="${subscription.endDate.getMonth() - currentDate.getMonth() > 0}">
+		                <c:if test="${subscription.endDate.getMonth() - currentDate.getMonth() > 0 || subscription.endDate.getYear() > currentDate.getYear()}">
 		                	<td><form method="post" action="${pageContext.request.contextPath}/controller/terminate-subscription">
 		                		<input type="hidden" name="subscription_id" value="${subscription.id}"/>
 		                		<button type="submit" class="btn btn-danger">${action_terminate}</button>
@@ -103,7 +104,11 @@
 		                		<input type="hidden" name="id" value="${subscription.publicationId}"/>
 		                		<button type="submit" class="btn btn-primary">${action_extend}</button>
 		                	</form></td>
-		                </c:if>
+		                </c:if>	
+		                <td><form method="get" action="${pageContext.request.contextPath}/controller/user/show-issues">
+		                		<input type="hidden" name="subscription_id" value="${subscription.id}"/>
+		                		<button type="submit" class="btn btn-primary">${action_extend}</button>
+		                	</form></td>	                
 		               </tr>
               	</c:forEach>
               </tbody>

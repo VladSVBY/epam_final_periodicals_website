@@ -8,7 +8,7 @@ import by.epam.periodicials_site.dao.DaoException;
 import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.entity.BalanceOperation;
 import by.epam.periodicials_site.service.BalanceOperationService;
-import by.epam.periodicials_site.service.ServiceException;
+import by.epam.periodicials_site.service.exception.ServiceException;
 
 public class BalanceOperationServiceImpl implements BalanceOperationService {
 	

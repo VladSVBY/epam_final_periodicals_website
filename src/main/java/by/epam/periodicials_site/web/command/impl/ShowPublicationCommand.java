@@ -16,9 +16,9 @@ import by.epam.periodicials_site.entity.Review;
 import by.epam.periodicials_site.entity.Theme;
 import by.epam.periodicials_site.service.PublicationService;
 import by.epam.periodicials_site.service.ReviewService;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.ThemeService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 

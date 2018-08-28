@@ -6,6 +6,7 @@ import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.Publication;
 import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.entity.dto.PublicationSearchCriteria;
+import by.epam.periodicials_site.service.exception.ServiceException;
 
 public interface PublicationService {
 	

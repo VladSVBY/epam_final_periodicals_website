@@ -4,6 +4,9 @@ public final class WebConstantDeclaration {
 	
 	private WebConstantDeclaration() {}
 	
+	public static final String FAIL_MESSAGE = "fail_message";
+	
+	public static final String VIEW_503_ERROR = "/WEB-INF/jsp/503-error.jsp";
 	public static final String VIEW_HOME = "/WEB-INF/jsp/home.jsp";
 	public static final String VIEW_LOGIN = "/WEB-INF/jsp/login.jsp";
 	public static final String VIEW_REGISTER = "/WEB-INF/jsp/register.jsp";
@@ -13,6 +16,8 @@ public final class WebConstantDeclaration {
 	public static final String VIEW_USER_BALANCE_OPERATION_HISTORY = "/WEB-INF/jsp/user/balance_operation_history.jsp";
 	public static final String VIEW_PUBLICATION_DETAILS = "/WEB-INF/jsp/publication.jsp";
 	public static final String VIEW_ADD_PUBLICATION_FORM = "/WEB-INF/jsp/admin/add_publication_form.jsp";
+	public static final String VIEW_EDIT_THEMES = "/WEB-INF/jsp/admin/edit_themes.jsp";
+	public static final String VIEW_AVALIABLE_ISSUES = "/WEB-INF/jsp/user/avaliable_issues.jsp";
 	
 	public static final String REQUEST_PARAM_LOGIN_OR_EMAIL = "login_or_email";
 	public static final String REQUEST_PARAM_PASSWORD = "password";
@@ -25,10 +30,21 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_PARAM_PUBLICATION_ID = "id";
 	public static final String REQUEST_PARAM_THEME_ID = "theme";
 	public static final String REQUEST_PARAM_SORT_ID = "order";
+	public static final String REQUEST_PARAM_CURRENT_PAGE = "currentPage";
+	public static final String REQUEST_PARAM_ITEMS_PER_PAGE = "itemsPerPage";
 	public static final String REQUEST_PARAM_REVIEW_TEXT = "text";
 	public static final String REQUEST_PARAM_REVIEW_MARK = "mark";
 	public static final String REQUEST_PARAM_REVIEW_ID_OF_PUBLICATION = "id_publication";
+	public static final String REQUEST_PARAM_SUBSCRIPTION_ID_OF_PUBLICATION = "publication_id";
+	public static final String REQUEST_PARAM_ISSUE_ID_OF_PUBLICATION = "publication_id";
+	public static final String REQUEST_PARAM_REVIEW_ID = "review_id";
 	public static final String REQUEST_PARAM_SUM_FOR_REPLENISHMENT = "sum";
+	public static final String REQUEST_PARAM_ISSUE_ID = "issue_id";
+	public static final String REQUEST_PARAM_ISSUE_DATE_OF_PUBLICATION = "date_of_publication";
+	public static final String REQUEST_PARAM_ISSUE_DESCRIPTION = "description";
+	public static final String REQUEST_PARAM_ISSUE_FILE = "issue_file";
+	public static final String REQUEST_PARAM_START_MONTH = "start_month";
+	public static final String REQUEST_PARAM_SUBSCRIPTION_DURATION = "duration";
 	
 	public static final String SESSION_ATTR_LOCALE = "locale";
 	public static final String SESSION_ATTR_REFER_PAGE = "referPage";
@@ -49,6 +65,7 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_ATTR_THEMES = "themes";
 	public static final String REQUEST_ATTR_USER = "user";
 	public static final String REQUEST_ATTR_PUBLICATION_SEARCH_CRITERIA = "search_criteria";
+	public static final String REQUEST_ATTR_ISSUES = "issues";
 	
 	public static final String COMMAND_HOME = "/home";
 	public static final String COMMAND_LOGIN = "/login";

@@ -8,7 +8,7 @@ import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.dao.ReviewDao;
 import by.epam.periodicials_site.entity.Review;
 import by.epam.periodicials_site.service.ReviewService;
-import by.epam.periodicials_site.service.ServiceException;
+import by.epam.periodicials_site.service.exception.ServiceException;
 
 public class ReviewServiceImpl implements ReviewService {
 	
@@ -20,7 +20,6 @@ public class ReviewServiceImpl implements ReviewService {
 		try {
 			reviews = reviewDao.readForPublication(publicationId);
 		} catch (DaoException e) {
-			// TODO logger
 			throw new ServiceException(e);
 		}
 		return reviews;
@@ -31,9 +30,35 @@ public class ReviewServiceImpl implements ReviewService {
 		try {
 			reviewDao.create(review);
 		} catch (DaoException e) {
-			// TODO logger
 			throw new ServiceException(e);
 		}		
+	}
+
+	@Override
+	public void update(Review review) throws ServiceException {
+		try {
+			reviewDao.update(review);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public void delete(int reviewId) throws ServiceException {
+		try {
+			reviewDao.delete(reviewId);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public Review read(int reviewId) throws ServiceException {
+		try {
+			return reviewDao.read(reviewId);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
 	}
 
 }

@@ -19,7 +19,9 @@ public class UserDaoImpl implements UserDao{
 	private static final String READ_USER_WITH_ID = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE users.id=?";
 	private static final String CREATE_USER = "INSERT INTO `periodicals_website`.`users` (`login`, `password`, `name`, `surname`, `email`) VALUES (?, ?, ?, ?, ?)";
 	private static final String ADD_TO_USER_BALANCE = "UPDATE `periodicals_website`.`users` SET `balance`=(SELECT balance + ? FROM (SELECT balance FROM users WHERE id=?) res) WHERE `id`=?";
-	private static final String REMOVE_FROM_USER_BALANCE = "SELECT balance - ? FROM users AS res WHERE id=?; UPDATE `periodicals_website`.`users` SET `balance`=NewBalance WHERE `id`=?";
+	private static final String REMOVE_FROM_USER_BALANCE = "UPDATE `periodicals_website`.`users` SET `balance`=(SELECT balance - ? FROM (SELECT balance FROM users WHERE id=?) res) WHERE `id`=?";
+	private static final String FIND_LOGIN = "SELECT id FROM users WHERE login=?";
+	private static final String FIND_EMAIL = "SELECT id FROM users WHERE email=?";
 	
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -33,10 +35,10 @@ public class UserDaoImpl implements UserDao{
 			ps.setString(4, user.getSurName());
 			ps.setString(5, user.getEmail());
 			int result = ps.executeUpdate();
-			if (result == 1) {
+			if (result > 0) {
 				ResultSet resultSet = ps.getGeneratedKeys();
 				resultSet.next();
-				user.setId(resultSet.getInt("id"));
+				user.setId(resultSet.getInt(1));
 			}
 			
 		} catch (SQLException e) {
@@ -84,17 +86,54 @@ public class UserDaoImpl implements UserDao{
 			ps.setInt(2, userId);
 			ps.setInt(3, userId);
 			ps.executeUpdate();
+			System.out.println("hello");
 		} catch (SQLException e) {
 			throw new DaoException("Exception adding to user balance", e);
 		}
 	}
 
 	@Override
-	public void removeFromBalanceTransaction(int userId, double sum, Connection connection) {
-		
-		
+	public void removeFromBalanceTransaction(int userId, double sum, Connection connection) throws DaoException {
+		try (PreparedStatement ps = connection.prepareStatement(REMOVE_FROM_USER_BALANCE)){
+			ps.setDouble(1, sum);
+			ps.setInt(2, userId);
+			ps.setInt(3, userId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Exception removing to user balance", e);
+		}
 	}
 	
+	@Override
+	public boolean loginExists(String login) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(FIND_LOGIN)){
+			ps.setString(1, login);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				return true;
+			}			
+		} catch (SQLException e) {
+			throw new DaoException("Exception finding login", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean emailExists(String email) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(FIND_EMAIL)){
+			ps.setString(1, email);
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				return true;
+			}			
+		} catch (SQLException e) {
+			throw new DaoException("Exception finding login", e);
+		}
+		return false;
+	}
+
 	private User createUser(ResultSet resultSet) throws SQLException {
 		User user = new User();
 		user.setId(resultSet.getInt("id"));

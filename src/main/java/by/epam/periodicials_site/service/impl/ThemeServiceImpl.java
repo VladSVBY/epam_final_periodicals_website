@@ -8,8 +8,8 @@ import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.dao.ThemeDao;
 import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.Theme;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ThemeService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 
 public class ThemeServiceImpl implements ThemeService {
 	

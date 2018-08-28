@@ -20,8 +20,11 @@ public class ReviewDaoImpl implements ReviewDao{
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 	
 	private static final String READ_REVIEWS_FOR_PUBLICATION = "SELECT id, id_user, id_publication, date_of_publication, text, mark FROM reviews WHERE id_publication=? ORDER BY date_of_publication DESC";
+	private static final String READ_REVIEW = "SELECT id, id_user, id_publication, date_of_publication, text, mark FROM reviews WHERE id=?";
 	private static final String INSERT_REVIEW = "INSERT INTO `periodicals_website`.`reviews` (`id_user`, `id_publication`, `date_of_publication`, `text`, `mark`) VALUES (?, ?, ?, ?, ?);";
-	
+	private static final String UPDATE_REVIEW = "UPDATE `periodicals_website`.`reviews` SET `text`=?, `mark`=? WHERE `id`=?";
+	private static final String DELETE_REVIEW = "DELETE FROM `periodicals_website`.`reviews` WHERE `id`=?";
+			
 	private static final String ID = "id";
 	private static final String ID_USER = "id_user";
 	private static final String ID_PUBLICATION = "id_publication";
@@ -59,20 +62,73 @@ public class ReviewDaoImpl implements ReviewDao{
 			ps.setString(4, review.getText());
 			ps.setByte(5, review.getMark());
 			
-			ps.executeUpdate();
+			int result = ps.executeUpdate();
+			
+			if (result > 0) {
+				ResultSet resultSet = ps.getGeneratedKeys();
+				resultSet.next();
+				review.setId(resultSet.getInt(ID));
+			}
 		} catch (SQLException e) {
 			throw new DaoException("Exception creating review", e);
 		}
 	}
+
+	@Override
+	public void update(Review review) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(UPDATE_REVIEW)
+		){
+			ps.setString(1, review.getText());
+			ps.setByte(2, review.getMark());
+			ps.setInt(3, review.getId());
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Exception updating review", e);
+		}		
+	}
+
+	@Override
+	public void delete(int id) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(DELETE_REVIEW)
+		){
+			ps.setInt(1, id);
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Exception deleting review", e);
+		}
+	}
 	
+	@Override
+	public Review read(int id) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(READ_REVIEW)
+		){
+			ps.setInt(1, id);
+			
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				return formReview(resultSet);
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Exception reading reviews", e);
+		}
+		return null;
+	}
+
 	private Review formReview(ResultSet resultSet) throws SQLException {
 		Review review = new Review();
+		
 		review.setId(resultSet.getInt(ID));
 		review.setUserId(resultSet.getInt(ID_USER));
 		review.setPublicationId(resultSet.getInt(ID_PUBLICATION));
 		review.setDateOfPublication(new Date(resultSet.getTimestamp(DATE_OF_PUBLICATION).getTime()));
 		review.setText(resultSet.getString(TEXT));
 		review.setMark(resultSet.getByte(MARK));
+		
 		return review;
 	}
 

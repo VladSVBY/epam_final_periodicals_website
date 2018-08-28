@@ -15,13 +15,18 @@ import by.epam.periodicials_site.entity.Publication;
 import by.epam.periodicials_site.entity.Theme;
 import by.epam.periodicials_site.entity.dto.PublicationSearchCriteria;
 import by.epam.periodicials_site.service.PublicationService;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.ThemeService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
 public class HomeCommand implements Command {
+	
+	private static final int THEME_DEFAULT = 0;
+	private static final int TYPE_DEFAULT = 0;
+	private static final int CURRENT_PAGE_DEFAULT = 1;
+	private static final int ITEMS_PER_PAGE_DEFAULT = 10;
 	
 	private PublicationService publicationService = ServiceFactory.getPublicationService();
 	private ThemeService themeService = ServiceFactory.getThemeService();
@@ -48,16 +53,25 @@ public class HomeCommand implements Command {
 	private PublicationSearchCriteria formSerrchCriteria(HttpServletRequest request) {
 		PublicationSearchCriteria criteria = new PublicationSearchCriteria();
 		LocaleType locale = HttpUtil.getLocale(request);
-		criteria.setLocale(locale);
+		
+		int themeId = THEME_DEFAULT;
+		int sortId = TYPE_DEFAULT;
+		int currentPage = CURRENT_PAGE_DEFAULT;
+		int itemsPerPage = ITEMS_PER_PAGE_DEFAULT;
 		try {
-			int themeId = Integer.parseInt(request.getParameter(REQUEST_PARAM_THEME_ID));
-			int sortId = Integer.parseInt(request.getParameter(REQUEST_PARAM_SORT_ID));
-			
-			criteria.setThemeId(themeId);
-			criteria.setOrderId(sortId);
+			themeId = Integer.parseInt(request.getParameter(REQUEST_PARAM_THEME_ID));
+			sortId = Integer.parseInt(request.getParameter(REQUEST_PARAM_SORT_ID));
+			currentPage = Integer.parseInt(request.getParameter(REQUEST_PARAM_CURRENT_PAGE));
+			itemsPerPage = Integer.parseInt(request.getParameter(REQUEST_PARAM_ITEMS_PER_PAGE));
 		} catch (NumberFormatException e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
+		
+		criteria.setLocale(locale);
+		criteria.setThemeId(themeId);
+		criteria.setOrderId(sortId);
+		criteria.setCurrentPage(currentPage);
+		criteria.setItemsPerPage(itemsPerPage);
 		return criteria;
 	}
 	

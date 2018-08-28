@@ -3,6 +3,7 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="paginator" uri="http://corporation.com/custom-tag/paginator"%>
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
 <fmt:bundle basename="localization.local" prefix = "home.">
@@ -127,6 +128,20 @@
 		       </li></a>
 			</c:forEach>	
 			</ul>
+			
+			<div class="row">
+			<div class="col">
+				${pages} 
+				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=3">3</a>
+				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=5">5</a>
+				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=30">30</a>
+			</div>		
+			<div class="col">
+				<paginator:display currentPage="${search_criteria.currentPage}" 
+					totalPageCount="50" viewPageCount="3" 
+					urlPattern="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&itemsPerPage=${search_criteria.itemsPerPage}&" />
+			</div>	
+		</div>
 		</div>
 	</div>
 	

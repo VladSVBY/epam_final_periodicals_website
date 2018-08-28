@@ -1,7 +1,7 @@
 package by.epam.periodicials_site.service;
 
-import by.epam.periodicials_site.dao.DaoException;
 import by.epam.periodicials_site.entity.User;
+import by.epam.periodicials_site.service.exception.ServiceException;
 
 public interface UserService {
 
@@ -10,4 +10,5 @@ public interface UserService {
 	User getUser(int userId) throws ServiceException;
 	
 	void registerUser(User user) throws ServiceException;
+	
 }

@@ -21,10 +21,10 @@ import by.epam.periodicials_site.entity.User;
 import by.epam.periodicials_site.entity.dto.PublicationSearchCriteria;
 import by.epam.periodicials_site.service.BalanceOperationService;
 import by.epam.periodicials_site.service.PublicationService;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.ThemeService;
 import by.epam.periodicials_site.service.UserService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 

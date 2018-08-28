@@ -1,5 +1,7 @@
 package by.epam.periodicials_site.service.impl;
 
+import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -16,10 +18,11 @@ import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.Publication;
 import by.epam.periodicials_site.entity.Subscription;
 import by.epam.periodicials_site.entity.SubscriptionStatus;
+import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.service.PublicationService;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.SubscriptionService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 
 public class SubscriptionServiceImpl implements SubscriptionService{
 	
@@ -50,7 +53,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 	}
 
 	@Override
-	public List<Subscription> readNonActiveForUser(int userId) {
+	public List<Subscription> readNonActiveForUser(int userId) throws ServiceException{
 		List<Subscription> subscriptions = Collections.emptyList();
 		try {
 			subscriptions = subscriptionDao.readAllForUser(userId);
@@ -69,8 +72,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 				}
 			}
 		} catch (DaoException e) {
-			// TODO logger
-			e.printStackTrace();
+			throw new ServiceException(e);
 		}
 		return subscriptions;
 	}
@@ -96,12 +98,55 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 				subscriptionDao.update(subscription);
 			}
 		} catch (DaoException e) {
-			// TODO logger
 			throw new ServiceException(e);
 		}
 		
 	}
 	
+	@Override
+	public Subscription read(int id) throws ServiceException {
+		try {
+			return subscriptionDao.read(id);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+	}
+	
+	@Override
+	public void create(int userId, int publicationId, int startMonth, int duration) throws ServiceException {
+		try {
+			LocalizedPublication publication = publicationService.readLocalized(publicationId);
+			double subscriptionPrice = publication.getPrice() * duration;
+			Calendar startDate = Calendar.getInstance();
+			startDate.set(Calendar.DAY_OF_MONTH, 1);
+			startDate.set(Calendar.MONTH, startMonth);
+			
+			Calendar endDate = Calendar.getInstance();
+			endDate.set(Calendar.DAY_OF_MONTH, 1);
+			endDate.set(Calendar.MONTH, startMonth + duration - 1);
+			endDate.add(Calendar.DAY_OF_MONTH, -1);
+					
+			Subscription subscription = new Subscription();
+			subscription.setUserId(userId);
+			subscription.setPublicationId(publicationId);
+			subscription.setPrice(subscriptionPrice);
+			subscription.setStartDate(startDate.getTime());
+			subscription.setEndDate(endDate.getTime());
+			subscription.setPrice(subscriptionPrice);
+			subscription.setStatus(SubscriptionStatus.ACTIVE);
+			
+			BalanceOperation balanceOperation = new BalanceOperation();
+			balanceOperation.setDate(new Date());
+			balanceOperation.setIdUser(userId);
+			balanceOperation.setType(BalanceOperationType.PAYMENT_OF_SUBSCRIPTION);
+			balanceOperation.setSum(subscriptionPrice);
+		
+			subscriptionDao.create(subscription, balanceOperation);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+	}
+
 	private double calculateSumForRefund(int monthToExpiration, int publicationID) {
 		Publication publication = publicationService.read(publicationID, LocaleType.EN_US);
 		return monthToExpiration * publication.getPrice();

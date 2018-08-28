@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.service.PublicationService;
-import by.epam.periodicials_site.service.ServiceException;
 import by.epam.periodicials_site.service.ServiceFactory;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
@@ -26,6 +26,7 @@ public class AddPublicationCommand implements Command {
 		try {
 			LocalizedPublication localizedPublication = formLocalizedPublication(request);
 			publicationService.add(localizedPublication);
+			System.out.println(request.getParameter("date_of_publication"));
 		} catch (ServiceException e) {
 			// TODO logger
 			e.printStackTrace();

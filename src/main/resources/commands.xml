@@ -27,6 +27,7 @@
 		<url-pattern>/publication</url-pattern>
 	</command>
 	
+	
 	<command>
 		<class>by.epam.periodicials_site.web.command.impl.AddPublicationCommand</class>
 		<url-pattern>/admin/add-publication</url-pattern>
@@ -34,6 +35,39 @@
 	<command>
 		<class>by.epam.periodicials_site.web.command.impl.GetAddPublicationFormCommand</class>
 		<url-pattern>/admin/add-publication-form</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.AddPublicationCommand</class>
+		<url-pattern>/admin/add-publication</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.EditThemesCommand</class>
+		<url-pattern>/admin/edit-themes</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UpdateReviewCommand</class>
+		<url-pattern>/admin/update-review</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.DeleteReviewCommand</class>
+		<url-pattern>/admin/delete-review</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UploadIssueCommand</class>
+		<url-pattern>/admin/upload-issue</url-pattern>
+	</command>
+	
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.ShowIssuesCommand</class>
+		<url-pattern>/user/show-issues</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.ShowIssueFileCommand</class>
+		<url-pattern>/user/show-issue-file</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.SubscribeToPublicationCommand</class>
+		<url-pattern>/user/subscribe</url-pattern>
 	</command>
 	
 </commands>

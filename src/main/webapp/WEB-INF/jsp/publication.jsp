@@ -13,7 +13,16 @@
 	<fmt:message key="price" var="price_header"/>
 	<fmt:message key="rating" var="rating_header"/>
 	<fmt:message key="login_message" var="login_message"/>
+	<fmt:message key="login_button" var="login_button"/>
+	<fmt:message key="register_button" var="register_button"/>
 	<fmt:message key="money_per_month" var="money_per_month"/>
+	<fmt:message key="add_review_header" var="add_review_header"/>
+	<fmt:message key="make_subscription_header" var="make_subscription_header"/>
+	<fmt:message key="reviews" var="reviews_header"/>
+	<fmt:message key="review_mark" var="review_mark"/>
+	<fmt:message key="review_text" var="review_text"/>
+	<fmt:message key="update_review_button" var="update_review_button"/>
+	<fmt:message key="delete_review_button" var="delete_review_button"/>
 </fmt:bundle>
 
 <!DOCTYPE html>
@@ -45,55 +54,96 @@
 			<div id="subscription">					
 					<c:if test="${userRole == null}">
 						<hr>
-						${login_message}
+						<div style="margin: 0 auto; width:500px">
+							<b><a href="${contextPath}/controller/login">${login_button}</a></b> ${login_message} <a href="${contextPath}/controller/register" style="float:right">${register_button}</a>
+						</div>
 					</c:if>
 					<c:if test="${userRole == Role.CUSTOMER}">
 						<hr>
-						Subscribe now:<br>
-						<div class="input-group mb-2" >
-						  <div class="input-group-prepend">
-						    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
-						  </div>
-						  <select class="custom-select" name="mark">
-						    <option value="0">0</option>
-						    <option value="1">1</option>
-						    <option value="2">2</option>
-						    <option value="3">3</option>
-						    <option value="4">4</option>
-						    <option value="5">5</option>
-						  </select>
-						</div>
-						<div class="input-group mb-2" >
-						  <div class="input-group-prepend">
-						    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
-						  </div>
-						  <select class="custom-select" name="duration" id="duration" onchange="countPrice()">
-						    <option value="1">1</option>
-						    <option value="2">2</option>
-						    <option value="3">3</option>
-						    <option value="4">4</option>
-						    <option value="5">5</option>
-						    <option value="6">6</option>
-						    <option value="7">7</option>
-						    <option value="8">8</option>
-						    <option value="9">9</option>
-						    <option value="10">10</option>
-						    <option value="11">11</option>
-						    <option value="12">12</option>
-						  </select>
-						</div>
-						<div>Price: <span id="total_price"></span></div>
+						<h2>${make_subscription_header}:</h2><br>
+						<form method="get" action="${pageContext.request.contextPath}/controller/user/subscribe">
+							<input type="hidden" name="publication_id" value="${publication.id}" />
+							<div class="input-group mb-2" >
+							  <div class="input-group-prepend">
+							    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+							  </div>
+							  <select class="custom-select" name="start_month">
+							    <option value="0">0</option>
+							    <option value="1">1</option>
+							    <option value="2">2</option>
+							    <option value="3">3</option>
+							    <option value="4">4</option>
+							    <option value="5">5</option>
+							    <option value="6">6</option>
+							    <option value="7">7</option>
+							    <option value="8">8</option>
+							    <option value="9">9</option>
+							    <option value="10">10</option>
+							    <option value="11">11</option>
+							    <option value="12">12</option>
+							  </select>
+							</div>
+							<div class="input-group mb-2" >
+							  <div class="input-group-prepend">
+							    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+							  </div>
+							  <select class="custom-select" name="duration" id="duration" onchange="countPrice()">
+							    <option value="1">1</option>
+							    <option value="2">2</option>
+							    <option value="3">3</option>
+							    <option value="4">4</option>
+							    <option value="5">5</option>
+							    <option value="6">6</option>
+							    <option value="7">7</option>
+							    <option value="8">8</option>
+							    <option value="9">9</option>
+							    <option value="10">10</option>
+							    <option value="11">11</option>
+							    <option value="12">12</option>
+							  </select>
+							</div>
+							<div>Price: <span id="total_price"></span></div>
+							<button type="submit" class="btn btn-primary">${action_extend}</button>
+						</form>
 					</c:if>					
+			</div>
+			<div>
+				<hr>
+			asfaasdgsa
+				<form action="${contextPath}/controller/admin/upload-issue" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="publication_id" value="${publication.id }">
+					<div class="input-group mb-3">
+					  <div class="input-group-prepend">
+					    <span class="input-group-text" id="inputGroup-sizing-default">Default</span>
+					  </div>
+					  <input type="date" name="date_of_publication" required="required" class="form-control" />
+					</div>
+					<div class="input-group">
+						  <div class="input-group-prepend">
+						    <span class="input-group-text">${review_text}:</span>
+						  </div>
+						  <textarea class="form-control" aria-label="With textarea" name="description"></textarea>
+					</div>
+					<div>
+				  		<input type="file" required="required" name="issue_file" id="issue_file">
+					</div>
+					<button type="submit" class="btn btn-primary" style="margin-top: 10px">${update_review_button }</button>
+				</form>
+				
+				
+				
+				
+				
 			</div>
 			<div id="reviews">
 				<c:if test="${userRole == Role.CUSTOMER || userRole == Role.ADMIN}">
 					<hr>
-					<h3>Оставьте ваш отзыв:</h3>
+					<h3>${add_review_header}</h3>
 					<form action="${contextPath}/controller/add-review" method="post">
 						<input type="hidden" name="id_publication" value="${publication.id}" />
 						<div class="input-group mb-2" >
 						  <div class="input-group-prepend">
-						    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+						    <label class="input-group-text" for="inputGroupSelect01">${review_mark}: </label>
 						  </div>
 						  <select class="custom-select" name="mark">
 						    <option value="0">0</option>
@@ -106,20 +156,51 @@
 						</div>
 						<div class="input-group">
 						  <div class="input-group-prepend">
-						    <span class="input-group-text">Text:</span>
+						    <span class="input-group-text">${review_text}:</span>
 						  </div>
 						  <textarea class="form-control" aria-label="With textarea" name="text"></textarea>
 						</div>
-						<button type="submit" class="btn btn-primary">Отправить</button>
+						<button type="submit" class="btn btn-primary" style="margin-top: 10px">${add_review_button }</button>
 					</form>
 				</c:if>
 				<hr>
-				<h2>Отзывы:</h2>
+				<h2>${reviews_header }:</h2>
 				<c:forEach items="${reviews}" var="review">
-					<b><fmt:formatDate value="${review.dateOfPublication}" pattern="yyyy-MM-dd HH:mm" /></b><br>
-					Оценка: ${review.mark}<br>
-					${review.text}<br>
-					<hr>
+					<c:if test="${userRole != Role.ADMIN}">
+						<b><fmt:formatDate value="${review.dateOfPublication}" pattern="yyyy-MM-dd HH:mm" /></b><br>
+						${review_mark}: ${review.mark}<br>
+						${review.text}<br>
+						<hr>
+					</c:if>
+					<c:if test="${userRole == Role.ADMIN}">
+						<b><fmt:formatDate value="${review.dateOfPublication}" pattern="yyyy-MM-dd HH:mm" /></b><br>
+						<form method="post">
+							<input type="hidden" name="review_id" value="${review.id}" />
+							<div class="input-group mb-2" >
+							  <div class="input-group-prepend">
+							    <label class="input-group-text" for="inputGroupSelect01">${review_mark}: </label>
+							  </div>
+							  <select class="custom-select" name="mark">
+							    <option value="0">0</option>
+							    <option value="1">1</option>
+							    <option value="2">2</option>
+							    <option value="3">3</option>
+							    <option value="4">4</option>
+							    <option value="5">5</option>
+							    <option value="${review.mark}" selected>${review.mark}</option>
+							  </select>
+							</div>
+							<div class="input-group">
+							  <div class="input-group-prepend">
+							    <span class="input-group-text">${review_text}:</span>
+							  </div>
+							  <textarea class="form-control" aria-label="With textarea" name="text">${review.text}</textarea>
+							</div>
+							<button type="submit" formaction="${contextPath}/controller/admin/update-review" class="btn btn-primary" style="margin-top: 10px">${update_review_button }</button>
+							<button type="submit" formaction="${contextPath}/controller/admin/delete-review" class="btn btn-danger" style="margin-top: 10px">${delete_review_button }</button>
+						</form>
+						<hr>
+					</c:if>
 				</c:forEach>
 			</div>
 		</div>

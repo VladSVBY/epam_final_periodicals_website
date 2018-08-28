@@ -77,7 +77,14 @@
 			<h4>${main_header }</h4>
 		</div>
 
-		<form action="${contextPath}/controller/admin/add-publication" method="post" enctype="multipart/form-data">	
+		<form action="${contextPath}/controller/admin/upload-issue" method="post" enctype="multipart/form-data">
+			<div class="input-group mb-3">
+					  <div class="input-group-prepend">
+					    <span class="input-group-text" id="inputGroup-sizing-default">Default</span>
+					  </div>
+					  <input type="date" name="date_of_publication" required="required" class="form-control" />
+					</div>
+						
 						<div class="input-group mb-2" >
 						  <div class="input-group-prepend">
 						    <label class="input-group-text" for="theme">${theme_select}:</label>
@@ -136,7 +143,7 @@
 			</div>
 			<div class="form-group">
 				<div class="form-group">
-						<label for="pivture">Picture:</label> 
+						<label for="picture">Picture:</label> 
 						<input type="file" class="form-control-file" name="picture" id="picture">																						
 					</div>
 			</div>	 	

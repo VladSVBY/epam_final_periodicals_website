@@ -1,7 +1,6 @@
 package by.epam.periodicials_site.dao;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import by.epam.periodicials_site.entity.User;
 
@@ -16,4 +15,8 @@ public interface UserDao {
 	void addToBalanceTransaction(int userId, double sum, Connection connection) throws DaoException;
 	
 	void removeFromBalanceTransaction(int userId, double sum, Connection connection) throws DaoException;
+	
+	boolean loginExists(String login) throws DaoException;
+	
+	boolean emailExists(String email) throws DaoException;
 }

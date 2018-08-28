@@ -11,7 +11,8 @@ import by.epam.periodicials_site.entity.Publication;
 import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.entity.dto.PublicationSearchCriteria;
 import by.epam.periodicials_site.service.PublicationService;
-import by.epam.periodicials_site.service.ServiceException;
+import by.epam.periodicials_site.service.exception.ServiceException;
+import by.epam.periodicials_site.service.util.MailSender;
 
 public class PublicationServiceImpl implements PublicationService{
 	

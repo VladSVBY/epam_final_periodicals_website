@@ -1,6 +1,7 @@
 package by.epam.periodicials_site.service;
 
 import by.epam.periodicials_site.service.impl.BalanceOperationServiceImpl;
+import by.epam.periodicials_site.service.impl.IssueServiceImpl;
 import by.epam.periodicials_site.service.impl.PublicationServiceImpl;
 import by.epam.periodicials_site.service.impl.ReviewServiceImpl;
 import by.epam.periodicials_site.service.impl.SubscriptionServiceImpl;
@@ -17,6 +18,7 @@ public final class ServiceFactory {
 	private static final SubscriptionService SUBSCRIPTION_SERVICE = new SubscriptionServiceImpl();
 	private static final BalanceOperationService BALANCE_OPERATION_SERVICE = new BalanceOperationServiceImpl();
 	private static final ReviewService REVIEW_SERVICE = new ReviewServiceImpl();
+	private static final IssueService ISSUE_SERVICE = new IssueServiceImpl();
 
 	public static UserService getUserService() {
 		return USER_SERVICE;
@@ -41,5 +43,9 @@ public final class ServiceFactory {
 	public static ThemeService getThemeService() {
 		return THEME_SERVICE;
 	}
+
+	public static IssueService getIssueService() {
+		return ISSUE_SERVICE;
+	} 
 	
 }
