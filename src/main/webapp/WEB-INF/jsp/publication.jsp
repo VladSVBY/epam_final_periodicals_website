@@ -21,8 +21,17 @@
 	<fmt:message key="reviews" var="reviews_header"/>
 	<fmt:message key="review_mark" var="review_mark"/>
 	<fmt:message key="review_text" var="review_text"/>
+	<fmt:message key="add_review_button" var="add_review_button"/>
 	<fmt:message key="update_review_button" var="update_review_button"/>
 	<fmt:message key="delete_review_button" var="delete_review_button"/>
+	<fmt:message key="add_issue_header" var="add_issue_header"/>
+	<fmt:message key="add_issue_button" var="add_issue_button"/>
+	<fmt:message key="issue_description" var="issue_description"/>
+	<fmt:message key="subscription_price" var="subscription_price"/>
+	<fmt:message key="subscription_start_month" var="subscription_start_month"/>
+	<fmt:message key="subscription_duration" var="subscription_duration"/>
+	<fmt:message key="create_subscription_button" var="create_subscription_button"/>
+	<fmt:message key="issue_date" var="issue_date"/>
 </fmt:bundle>
 
 <!DOCTYPE html>
@@ -44,8 +53,8 @@
 				<img src="<c:url value="/resources/img/${publication.picturePath}" />" id="picture"/>
 				<div id="description">
 					<p><b>${publication_header}:</b> ${publication.name}</p>
-					<p><b>${theme_header}:</b> ${publication.name}</p>
-					<p><b>${type_header}:</b> ${publication.name}</p>
+					<p><b>${theme_header}:</b> ${theme.name}</p>
+					<p><b>${type_header}:</b> ${type.name}</p>
 					<p><b>${rating_header}:</b> ${publication.rating}</p>
 					<p>${publication.description}</p>
 					<p><b>${price_header}:</b> ${publication.price} ${money_per_month}</p>
@@ -65,10 +74,9 @@
 							<input type="hidden" name="publication_id" value="${publication.id}" />
 							<div class="input-group mb-2" >
 							  <div class="input-group-prepend">
-							    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+							    <label class="input-group-text" for="inputGroupSelect01">${subscription_start_month }: </label>
 							  </div>
 							  <select class="custom-select" name="start_month">
-							    <option value="0">0</option>
 							    <option value="1">1</option>
 							    <option value="2">2</option>
 							    <option value="3">3</option>
@@ -85,7 +93,7 @@
 							</div>
 							<div class="input-group mb-2" >
 							  <div class="input-group-prepend">
-							    <label class="input-group-text" for="inputGroupSelect01">Оценка: </label>
+							    <label class="input-group-text" for="inputGroupSelect01">${subscription_duration }: </label>
 							  </div>
 							  <select class="custom-select" name="duration" id="duration" onchange="countPrice()">
 							    <option value="1">1</option>
@@ -102,40 +110,42 @@
 							    <option value="12">12</option>
 							  </select>
 							</div>
-							<div>Price: <span id="total_price"></span></div>
-							<button type="submit" class="btn btn-primary">${action_extend}</button>
+							<div>${subscription_price} <span id="total_price"></span></div>
+							<button type="submit" class="btn btn-primary">${create_subscription_button}</button>
 						</form>
 					</c:if>					
 			</div>
-			<div>
-				<hr>
-			asfaasdgsa
-				<form action="${contextPath}/controller/admin/upload-issue" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="publication_id" value="${publication.id }">
-					<div class="input-group mb-3">
-					  <div class="input-group-prepend">
-					    <span class="input-group-text" id="inputGroup-sizing-default">Default</span>
-					  </div>
-					  <input type="date" name="date_of_publication" required="required" class="form-control" />
-					</div>
-					<div class="input-group">
+			<c:if test="${userRole == Role.ADMIN}">
+				<div>
+					<hr>
+					<h3>${add_issue_header}:</h3>
+					<form action="${contextPath}/controller/admin/upload-issue" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="publication_id" value="${publication.id }">
+						<div class="input-group mb-3">
 						  <div class="input-group-prepend">
-						    <span class="input-group-text">${review_text}:</span>
+						    <span class="input-group-text" id="inputGroup-sizing-default">${issue_date }</span>
 						  </div>
-						  <textarea class="form-control" aria-label="With textarea" name="description"></textarea>
-					</div>
-					<div>
-				  		<input type="file" required="required" name="issue_file" id="issue_file">
-					</div>
-					<button type="submit" class="btn btn-primary" style="margin-top: 10px">${update_review_button }</button>
-				</form>		
-				
-			</div>
+						  <input type="date" name="date_of_publication" required="required" class="form-control" />
+						</div>
+						<div class="input-group">
+							  <div class="input-group-prepend">
+							    <span class="input-group-text">${issue_description}:</span>
+							  </div>
+							  <textarea class="form-control" aria-label="With textarea" name="description" required></textarea>
+						</div>
+						<div>
+					  		<input type="file" required="required" name="issue_file" id="issue_file">
+						</div>
+						<button type="submit" class="btn btn-primary" style="margin-top: 10px">${add_issue_button }</button>
+					</form>		
+					
+				</div>
+			</c:if>
 			<div id="reviews">
 				<c:if test="${userRole == Role.CUSTOMER || userRole == Role.ADMIN}">
 					<hr>
-					<h3>${add_review_header}</h3>
-					<form action="${contextPath}/controller/add-review" method="post">
+					<h3>${add_review_header}:</h3>
+					<form action="${contextPath}/controller/user/add-review" method="post">
 						<input type="hidden" name="id_publication" value="${publication.id}" />
 						<div class="input-group mb-2" >
 						  <div class="input-group-prepend">
@@ -154,13 +164,15 @@
 						  <div class="input-group-prepend">
 						    <span class="input-group-text">${review_text}:</span>
 						  </div>
-						  <textarea class="form-control" aria-label="With textarea" name="text"></textarea>
+						  <textarea class="form-control" aria-label="With textarea" name="text" required></textarea>
 						</div>
 						<button type="submit" class="btn btn-primary" style="margin-top: 10px">${add_review_button }</button>
 					</form>
 				</c:if>
 				<hr>
-				<h2>${reviews_header }:</h2>
+				<c:if test="${reviews.size() != 0}">
+					<h2>${reviews_header }:</h2>
+				</c:if>
 				<c:forEach items="${reviews}" var="review">
 					<c:if test="${userRole != Role.ADMIN}">
 						<b><fmt:formatDate value="${review.dateOfPublication}" pattern="yyyy-MM-dd HH:mm" /></b><br>

@@ -27,7 +27,7 @@ public class TypeDaoImpl implements TypeDao{
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 	
 	private static final String READ_ALL_WITH_LOCALE = "SELECT types.id, name FROM types JOIN types_local ON types.id=types_local.id_type WHERE locale=?";
-	private static final String READ_WITH_LOCALE = "SELECT types.id, name FROM types JOIN types_local ON types.id=types_local.id_type WHERE types.id=? locale=?";
+	private static final String READ_WITH_LOCALE = "SELECT types.id, name FROM types JOIN types_local ON types.id=types_local.id_type WHERE types.id=? AND locale=?";
 	private static final String READ_ALL = "SELECT types.id, default_name, locale, name FROM types JOIN types_local ON types.id=types_local.id_type ORDER BY types.id";
 	private static final String CREATE_MAIN_INFO = "INSERT INTO `periodicals_website`.`types` (`default_name`) VALUES (?)";
 	private static final String CREATE_LOCALIZED_INFO = "INSERT INTO `periodicals_website`.`types_local` (`id_type`, `locale`, `name`) VALUES (?, ?, ?);";
@@ -65,7 +65,7 @@ public class TypeDaoImpl implements TypeDao{
 				PreparedStatement ps = connection.prepareStatement(READ_WITH_LOCALE)
 		){	
 			ps.setInt(1, id);
-			ps.setString(1, locale.name());
+			ps.setString(2, locale.name());
 			
 			ResultSet resultSet = ps.executeQuery();
 			

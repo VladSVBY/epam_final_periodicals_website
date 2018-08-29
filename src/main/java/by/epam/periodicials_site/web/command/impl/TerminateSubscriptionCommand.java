@@ -40,6 +40,7 @@ private static final Logger logger = LogManager.getLogger(TerminateSubscriptionC
 			String path = HttpUtil.formRedirectUrl(request, COMMAND_SHOW_RESULT_PAGE);
 			path = HttpUtil.addParamToPath(path, REQUEST_ATTR_MESSAGE, message);
 			path = HttpUtil.addParamToPath(path, REQUEST_ATTR_RETURN_PAGE, returnPage);
+			response.sendRedirect(path);
 		} catch (ServiceException e) {
 			logger.error("Exception terminating subscription", e);
 			request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);

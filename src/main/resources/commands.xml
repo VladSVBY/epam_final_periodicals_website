@@ -49,6 +49,10 @@
 		<url-pattern>/admin/edit-themes</url-pattern>
 	</command>
 	<command>
+		<class>by.epam.periodicials_site.web.command.impl.EditTypesCommand</class>
+		<url-pattern>/admin/edit-types</url-pattern>
+	</command>
+	<command>
 		<class>by.epam.periodicials_site.web.command.impl.UpdateReviewCommand</class>
 		<url-pattern>/admin/update-review</url-pattern>
 	</command>
@@ -68,6 +72,14 @@
 		<class>by.epam.periodicials_site.web.command.impl.AddThemeCommand</class>
 		<url-pattern>/admin/add-theme</url-pattern>
 	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UpdateTypeCommand</class>
+		<url-pattern>/admin/update-type</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.AddTypeCommand</class>
+		<url-pattern>/admin/add-type</url-pattern>
+	</command>
 	
 	<command>
 		<class>by.epam.periodicials_site.web.command.impl.ShowIssuesCommand</class>
@@ -80,6 +92,33 @@
 	<command>
 		<class>by.epam.periodicials_site.web.command.impl.SubscribeToPublicationCommand</class>
 		<url-pattern>/user/subscribe</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UserActiveSubscriptionsCommand</class>
+		<url-pattern>/user/subscriptions</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UserProfileCommand</class>
+		<url-pattern>/user/profile</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UserSubscriptionHistoryCommand</class>
+		<url-pattern>/user/subscription-history</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UserBalanceOperationCommand</class>
+		<url-pattern>/user/balance-operation-history</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.TerminateSubscriptionCommand</class>
+		<url-pattern>/user/terminate-subscription</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.AddReviewCommand</class>
+		<url-pattern>/user/add-review</url-pattern>
+	</command><command>
+		<class>by.epam.periodicials_site.web.command.impl.ReplenishBalanceCommand</class>
+		<url-pattern>/user/replenish-balance</url-pattern>
 	</command>
 	
 </commands>

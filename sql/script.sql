@@ -489,16 +489,16 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `periodicals_website`;
-INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (1, 6, '2018-05-01 12:12:12', 45.4, 'PAYMENT_OF_SUBSCRIPTION\', \'REFUND');
+INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (1, 6, '2018-05-01 12:12:12', 45.4, 'PAYMENT_OF_SUBSCRIPTION');
 INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (2, 6, '2018-05-01 12:12:12', 465, 'BALANCE_REPLENISHMENT');
-INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (3, 2, '2018-05-01 12:12:12', 13.2, 'PAYMENT_OF_SUBSCRIPTION\', \'REFUND');
+INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (3, 2, '2018-05-01 12:12:12', 13.2, 'PAYMENT_OF_SUBSCRIPTION');
 INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (4, 3, '2018-05-01 12:12:12', 454.1, 'REFUND');
 INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (5, 4, '2018-05-01 12:12:12', 12.51, 'BALANCE_REPLENISHMENT');
-INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (6, 5, '2018-05-01 12:12:12', 18.12, 'PAYMENT_OF_SUBSCRIPTION\', \'REFUND');
+INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (6, 5, '2018-05-01 12:12:12', 18.12, 'PAYMENT_OF_SUBSCRIPTION');
 INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (7, 5, '2018-05-01 12:12:12', 146, 'BALANCE_REPLENISHMENT');
-INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (8, 2, '2018-05-01 12:12:12', 12.25, 'PAYMENT_OF_SUBSCRIPTION\', \'REFUND');
+INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (8, 2, '2018-05-01 12:12:12', 12.25, 'PAYMENT_OF_SUBSCRIPTION');
 INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (9, 1, '2018-05-01 12:12:12', 145, 'REFUND');
-INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (10, 6, '2018-05-01 12:12:12', 12.5, 'PAYMENT_OF_SUBSCRIPTION\', \'REFUND');
+INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (10, 6, '2018-05-01 12:12:12', 12.5, 'PAYMENT_OF_SUBSCRIPTION');
 INSERT INTO `periodicals_website`.`balance_operations` (`id`, `id_user`, `date`, `sum`, `type`) VALUES (11, 3, '2018-05-01 12:12:12', 98.63, 'REFUND');
 
 COMMIT;

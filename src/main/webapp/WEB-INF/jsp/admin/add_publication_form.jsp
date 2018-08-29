@@ -5,12 +5,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
-<fmt:bundle basename="localization.local" prefix = "user_menu.">
-	<fmt:message key="profile_option" var="profile_option"/>
-	<fmt:message key="active_subscriptions_option" var="active_subscriptions_option"/>
-	<fmt:message key="subscription_history_option" var="subscription_history_option"/>
-	<fmt:message key="balance_operation_history_option" var="balance_operation_history_option"/>
-</fmt:bundle>
 
 <fmt:bundle basename="localization.local" prefix = "add_publication_form.">
 	<fmt:message key="title" var="title"/>

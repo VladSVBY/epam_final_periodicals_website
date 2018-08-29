@@ -4,7 +4,9 @@ import static by.epam.periodicials_site.web.util.WebConstantDeclaration.*;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -49,10 +51,15 @@ public class HomeCommand implements Command {
 			List<Publication> publications = publicationService.readAll(criteria);
 			List<Theme> themes = themeService.readAll(locale);
 			List<Type> types = typeService.readAll(locale);
+			Map<Short, String> typeNames = new HashMap<>();
+			for (Type type : types) {
+				typeNames.put(type.getId(), type.getName());
+			}
 			
 			request.setAttribute(REQUEST_ATTR_PUBLICATION_LIST, publications);
 			request.setAttribute(REQUEST_ATTR_THEMES, themes);
 			request.setAttribute(REQUEST_ATTR_TYPES, types);
+			request.setAttribute(REQUEST_ATTR_TYPE_NAMES, typeNames);
 			request.setAttribute(REQUEST_ATTR_PUBLICATION_SEARCH_CRITERIA, criteria);
 			request.getRequestDispatcher(VIEW_HOME).forward(request, response);
 		} catch (ServiceException e) {

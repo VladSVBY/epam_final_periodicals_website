@@ -28,7 +28,12 @@
         <ul class="navbar-nav navbar-right">
         	<c:if test="${userName != null}">
         		<li class="nav-item active">
-            	<a class="nav-link" href="${contextPath}/controller/profile">${userName}</a>
+        		<c:if test="${userRole == Role.CUSTOMER}">
+            		<a class="nav-link" href="${contextPath}/controller/user/profile">${userName}</a>
+            	</c:if>
+            	<c:if test="${userRole == Role.ADMIN}">
+            		<a class="nav-link" href="${contextPath}/controller/admin/add-publicatio-form">${userName}</a>
+            	</c:if>
 	         	</li>
 	         	<li class="nav-item active">
 	            	<a class="nav-link" href="<c:url value='logout'/>">${logout}</a>

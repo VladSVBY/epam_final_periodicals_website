@@ -178,7 +178,7 @@ public class PublicationDaoImpl implements PublicationDao{
 			connection.commit();
 		} catch (SQLException e) {
 			try {
-					connection.rollback();
+					connectionPool.rollBack(connection);
 			} catch (SQLException e1) {
 				throw new DaoException("Exception rollbacking publication", e);
 			}
@@ -270,7 +270,7 @@ public class PublicationDaoImpl implements PublicationDao{
 	
 	private void setType(StringBuilder query, PublicationSearchCriteria criteria) {
 		if (criteria.getTypeId() != ALL_TYPES) {
-			query.append(String.format(TYPE_CLAUSE, criteria.getThemeId()));
+			query.append(String.format(TYPE_CLAUSE, criteria.getTypeId()));
 		}
 	}
 	

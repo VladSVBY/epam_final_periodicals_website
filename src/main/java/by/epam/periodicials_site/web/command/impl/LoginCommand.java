@@ -60,13 +60,14 @@ public class LoginCommand implements Command {
 						path = (path != null) ? path : HttpUtil.formRedirectUrl(request, COMMAND_HOME);
 						response.sendRedirect(path);
 					}
+				} else {
+					request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
 				}
 			} catch (ValidationException e) {
 				String message = MessageResolver.getMessage(INVALID_DATA, locale);
 				request.setAttribute(FAIL_MESSAGE_ADD_PUBLICATION, message);
 				request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
-			}
-			catch (ServiceException e) {
+			} catch (ServiceException e) {
 				logger.error("Exception during log in", e);
 				request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
 			}

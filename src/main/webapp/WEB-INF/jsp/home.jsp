@@ -11,6 +11,7 @@
 	<fmt:message key="main_header" var="main_header"/>
 	<fmt:message key="show_button" var="show_button"/>
 	<fmt:message key="theme_option" var="theme_option"/>
+	<fmt:message key="type_option" var="type_option"/>
 	<fmt:message key="sort_option" var="sort_option"/>
 	<fmt:message key="index_header" var="index_header"/>
 	<fmt:message key="publication_header" var="publication_header"/>
@@ -18,6 +19,7 @@
 	<fmt:message key="rating_header" var="rating_header"/>
 	<fmt:message key="price_header" var="price_header"/>
 	<fmt:message key="theme_option_all" var="theme_option_all"/>
+	<fmt:message key="type_option_all" var="type_option_all"/>
 	<fmt:message key="sort_option_alphbetically" var="sort_option_alphabetically"/>
 	<fmt:message key="sort_option_rating" var="sort_option_rating"/>
 	<fmt:message key="sort_option_price" var="sort_option_price"/>
@@ -36,7 +38,7 @@
 	
 	<%@include file="nav.jsp" %>
 	<div class="content">
-		<div class="left">
+		<div class="left" style="margin-top: 20px">
 		  <div class="input-group mb-4">
 			  <div class="input-group-prepend">
 			    <label class="input-group-text" for="inputGroupSelect01">${theme_option}:</label>
@@ -54,6 +56,27 @@
 						</c:if>
 						<c:if test="${search_criteria.themeId != theme.id}">
 							<option value="${theme.id}">${theme.name}</option>
+						</c:if>
+					</c:forEach>
+				</select>
+		  </div>
+		  <div class="input-group mb-4">
+			  <div class="input-group-prepend">
+			    <label class="input-group-text" for="inputGroupSelect01">${type_option}:</label>
+			  </div>			  
+				<select class="custom-select" id="type" name="type" onchange="goToPage()">
+					<c:if test="${search_criteria.typeId == 0}">
+						<option value="0" selected>${type_option_all}</option>
+					</c:if>
+					<c:if test="${search_criteria.typeId != 0}">
+						<option value="0">${type_option_all}</option>
+					</c:if>
+				 	<c:forEach items="${types}" var="type">
+				 		<c:if test="${search_criteria.typeId == type.id}">
+							<option value="${type.id}" selected>${type.name}</option>
+						</c:if>
+						<c:if test="${search_criteria.typeId != type.id}">
+							<option value="${type.id}">${type.name}</option>
 						</c:if>
 					</c:forEach>
 				</select>
@@ -89,13 +112,13 @@
 	      <ul class="list-group">
 	      <li class="list-group-item">
 	      	<div class="row">
-	      		<div class=col-md-1>
+	      				<div class=col-md-1>
 	                        ${index_header}
 	                    </div>
 	                    <div class=col-md-4>
 	                        ${publication_header}
 	                    </div>
-	                    <div class=col-md-1>
+	                    <div class=col-md-2>
 	                        ${type_header}
 	                    </div>
 	                    <div class=col-md-1>
@@ -115,8 +138,8 @@
 	                    <div class=col-md-4>
 	                        ${publication.name}
 	                    </div>
-	                    <div class=col-md-1>
-	                        ${typeNames.get(publucation.id)}
+	                    <div class=col-md-2>
+	                        ${typeNames.get(publication.typeID)}
 	                    </div>
 	                    <div class=col-md-1>
 	                        ${publication.price}
@@ -132,9 +155,9 @@
 			<div class="row">
 			<div class="col">
 				${pages} 
-				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=3">3</a>
-				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=5">5</a>
-				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=30">30</a>
+				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&type=${search_criteria.typeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=3">3</a>
+				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&type=${search_criteria.typeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=5">5</a>
+				<a class="text-success" href="${contextPath}/controller/home?theme=${search_criteria.themeId}&type=${search_criteria.typeId}&order=${search_criteria.orderId}&currentPage=1&itemsPerPage=30">30</a>
 			</div>		
 			<div class="col">
 				<paginator:display currentPage="${search_criteria.currentPage}" 
@@ -149,8 +172,9 @@
 		function goToPage()
 			{
 				var theme = document.getElementById("theme").value;
+				var type = document.getElementById("type").value;
 				var order = document.getElementById("order").value;
-				document.location.href = '${contextPath}/controller/home?theme=' + theme + '&order=' + order;
+				document.location.href = '${contextPath}/controller/home?theme=' + theme + '&type=' + type + '&order=' + order + '&itemsPerPage=' + '${search_criteria.itemsPerPage}' + '&currentPage=1';
 			}
 	</script>
 	

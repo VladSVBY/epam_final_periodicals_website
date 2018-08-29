@@ -15,6 +15,7 @@ public final class WebConstantDeclaration {
 	public static final String VIEW_PUBLICATION_DETAILS = "/WEB-INF/jsp/publication.jsp";
 	public static final String VIEW_ADD_PUBLICATION_FORM = "/WEB-INF/jsp/admin/add_publication_form.jsp";
 	public static final String VIEW_EDIT_THEMES = "/WEB-INF/jsp/admin/edit_themes.jsp";
+	public static final String VIEW_EDIT_TYPES = "/WEB-INF/jsp/admin/edit_types.jsp";
 	public static final String VIEW_AVALIABLE_ISSUES = "/WEB-INF/jsp/user/avaliable_issues.jsp";
 	public static final String VIEW_RESULT_PAGE = "/WEB-INF/jsp/result_page.jsp";
 	
@@ -76,6 +77,9 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_ATTR_ISSUES = "issues";
 	public static final String REQUEST_ATTR_MESSAGE = "message";
 	public static final String REQUEST_ATTR_RETURN_PAGE = "return_page";
+	public static final String REQUEST_ATTR_TYPE_NAMES = "typeNames";
+	public static final String REQUEST_ATTR_TYPE = "type";
+	public static final String REQUEST_ATTR_THEME = "theme";
 	
 	public static final String COMMAND_HOME = "/home";
 	public static final String COMMAND_LOGIN = "/login";
@@ -98,8 +102,9 @@ public final class WebConstantDeclaration {
 	
 	public static final String FAIL_MESSAGE_ADD_PUBLICATION = "publication_fail_message";
 	public static final String FAIL_MESSAGE_ADD_ISSUE = "issue_fail_message";
-	public static final String FAIL_MESSAGE_UPDATE_THEME = "issue_fail_message";
-	public static final String FAIL_MESSAGE_ADD_THEME = "issue_fail_message";
+	public static final String FAIL_MESSAGE_UPDATE_THEME = "theme_fail_message";
+	public static final String FAIL_MESSAGE_ADD_THEME = "theme_fail_message";
+	public static final String FAIL_MESSAGE_ADD_TYPE = "type_fail_message";
 	public static final String FAIL_MESSAGE_UPDATE_TYPE = "type_fail_message";
 	public static final String FAIL_MESSAGE_UPDATE_REVIEW = "review_fail_message";
 	public static final String FAIL_MESSAGE_REGISTER = "registerw_fail_message";

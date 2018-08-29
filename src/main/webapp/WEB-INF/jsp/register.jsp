@@ -25,6 +25,7 @@
 		<title>${title}</title>
 		<link href="<c:url value="/resources/css/register.css" />" rel="stylesheet" />
 		<link href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" rel="stylesheet"> 
+		<script type="text/javascript" src="<c:url value="/resources/js/sha512.js" />"></script>
 	</head>
 <body>
 
@@ -41,9 +42,23 @@
 	    </fieldset>
 	    <p style="color:red">${fail_message}</p>
 	    <fieldset id="actions">
-	        <input type="submit" id="submit" value="${button_register}">
+	        <input type="submit" id="submit" value="${button_register}" onclick="formHash(this.form, this.form.real_password)">
 	        <a href="${contextPath}/controller/login">${link_login}</a>
 	    </fieldset>
 	</form>
+	
+	<script type= "text/javascript">
+		function formHash(form, real_password)
+			{
+				var hashPassword = document.createElement("input");
+				form.appendChild(hashPassword);
+				hashPassword.name = "password";
+				hashPassword.type = "hidden";
+				hashPassword.value = hex_sha512(real_password.value)
+				real_password.value = "";
+				form.submit();
+				return true;
+			}
+	</script>
 </body>
 </html>

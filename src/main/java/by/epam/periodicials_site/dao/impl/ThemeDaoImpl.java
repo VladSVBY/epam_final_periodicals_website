@@ -27,7 +27,7 @@ public class ThemeDaoImpl implements ThemeDao{
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 	
 	private static final String READ_ALL_WITH_LOCALE = "SELECT themes.id, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme WHERE locale=?";
-	private static final String READ_WITH_LOCALE = "SELECT themes.id, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme WHERE themes.id=? locale=?";
+	private static final String READ_WITH_LOCALE = "SELECT themes.id, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme WHERE themes.id=? AND locale=?";
 	private static final String READ_ALL = "SELECT themes.id, default_name, locale, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme ORDER BY themes.id";
 	private static final String CREATE_MAIN_INFO = "INSERT INTO `periodicals_website`.`themes` (`default_name`) VALUES (?)";
 	private static final String CREATE_LOCALIZED_INFO = "INSERT INTO `periodicals_website`.`themes_local` (`id_theme`, `locale`, `name`) VALUES (?, ?, ?);";
@@ -65,7 +65,7 @@ public class ThemeDaoImpl implements ThemeDao{
 				PreparedStatement ps = connection.prepareStatement(READ_WITH_LOCALE)
 		){	
 			ps.setInt(1, id);
-			ps.setString(1, locale.name());
+			ps.setString(2, locale.name());
 			
 			ResultSet resultSet = ps.executeQuery();
 			

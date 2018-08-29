@@ -8,14 +8,14 @@
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
 
-<fmt:bundle basename="localization.local" prefix = "edit_themes.">
+<fmt:bundle basename="localization.local" prefix = "edit_types.">
 	<fmt:message key="title" var="title"/>
-	<fmt:message key="add_theme_header" var="add_theme_header"/>
-	<fmt:message key="current_themes_header" var="current_themes_header"/>
-	<fmt:message key="add_theme_button" var="add_theme_button"/>
+	<fmt:message key="add_type_header" var="add_type_header"/>
+	<fmt:message key="current_types_header" var="current_types_header"/>
+	<fmt:message key="add_type_button" var="add_type_button"/>
 	<fmt:message key="version_ru" var="version_ru"/>
 	<fmt:message key="version_en" var="version_en"/>
-	<fmt:message key="update_theme_button" var="update_theme_button"/>
+	<fmt:message key="update_type_button" var="update_type_button"/>
 </fmt:bundle>
 
 <!DOCTYPE html>
@@ -39,10 +39,10 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
 		<div class="bg-success text-white text-center" >
-			<h4>${add_theme_header }:</h4>
+			<h4>${add_type_header }:</h4>
 		</div>
 
-		<form action="${contextPath}/controller/admin/add-theme" method="post">			 	
+		<form action="${contextPath}/controller/admin/add-type" method="post">			 	
 			<div class="row">
 					<div class="form-group col-5">					
 						<input type="text" class="form-control" placeholder="${version_ru}" name="name_ru" id="name_ru">
@@ -51,27 +51,27 @@
 						<input type="text" class="form-control" placeholder="${version_en}" name="name_en" id="name_en">
 					</div>
 					<div class="form-group col-2">					
-						<button type="submit" class="btn btn-success">${add_theme_button }</button>
+						<button type="submit" class="btn btn-success">${add_type_button }</button>
 					</div>
 			</div>				
 		</form>	
 		<div class="bg-success text-white text-center" >
-			<h4>${current_themes_header }:</h4>
+			<h4>${current_types_header }:</h4>
 		</div>
-		<c:forEach items="${themes}" var="theme">
-			<form action="${contextPath}/controller/admin/update-theme" method="post">		 	
+		<c:forEach items="${types}" var="type">
+			<form action="${contextPath}/controller/admin/update-type" method="post">		 	
 				<div class="row">
 						<div class="form-group col-1">					
-							<input type="text" class="form-control" name="theme" value="${theme.id}" readonly="readonly"/>
+							<input type="text" class="form-control" name="type" value="${type.id}" readonly="readonly"/>
 						</div>
 						<div class="form-group col-5">					
-							<input type="text" class="form-control" placeholder="${version_ru}" name="name_ru" id="name_ru" value="${theme.getLocalizedNames().get(LocaleType.RU_BY)}">
+							<input type="text" class="form-control" placeholder="${version_ru}" name="name_ru" id="name_ru" value="${type.getLocalizedNames().get(LocaleType.RU_BY)}">
 						</div>
 						<div class="form-group col-5">					
-							<input type="text" class="form-control" placeholder="${version_en}" name="name_en" id="name_by" value="${theme.getLocalizedNames().get(LocaleType.EN_US)}">
+							<input type="text" class="form-control" placeholder="${version_en}" name="name_en" id="name_by" value="${type.getLocalizedNames().get(LocaleType.EN_US)}">
 						</div>
 						<div class="form-group col-1">					
-							<button type="submit" class="btn btn-success">${update_theme_button}</button>
+							<button type="submit" class="btn btn-success">${update_type_button}</button>
 						</div>
 				</div>				
 			</form>
