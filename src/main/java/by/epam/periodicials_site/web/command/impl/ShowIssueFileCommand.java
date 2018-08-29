@@ -8,6 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.periodicials_site.entity.Issue;
 import by.epam.periodicials_site.service.IssueService;
 import by.epam.periodicials_site.service.ServiceFactory;
@@ -16,6 +19,8 @@ import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
 public class ShowIssueFileCommand implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(ShowIssueFileCommand.class);
 	
 	private IssueService issueService = ServiceFactory.getIssueService();
 
@@ -27,7 +32,8 @@ public class ShowIssueFileCommand implements Command {
 			
 			HttpUtil.writeIssueIntoRespone(issue, response, request);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			logger.error("Exception showing issue file", e);
+			request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
 		}
 	}
 

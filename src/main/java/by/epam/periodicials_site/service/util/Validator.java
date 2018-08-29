@@ -23,7 +23,7 @@ public final class Validator {
 		return true;
 	}
 	
-	public static boolean EamilIsValid(String email) {
+	public static boolean emailIsValid(String email) {
 		return email.matches(EMAIL_REG_EX);
 	}
 	

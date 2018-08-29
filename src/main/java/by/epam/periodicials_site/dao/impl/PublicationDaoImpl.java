@@ -269,7 +269,7 @@ public class PublicationDaoImpl implements PublicationDao{
 	}
 	
 	private void setType(StringBuilder query, PublicationSearchCriteria criteria) {
-		if (criteria.getThemeId() != ALL_TYPES) {
+		if (criteria.getTypeId() != ALL_TYPES) {
 			query.append(String.format(TYPE_CLAUSE, criteria.getThemeId()));
 		}
 	}

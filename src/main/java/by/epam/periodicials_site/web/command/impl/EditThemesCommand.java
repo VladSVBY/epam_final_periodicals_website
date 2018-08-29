@@ -1,6 +1,7 @@
 package by.epam.periodicials_site.web.command.impl;
 
 import static by.epam.periodicials_site.web.util.WebConstantDeclaration.REQUEST_ATTR_THEMES;
+
 import static by.epam.periodicials_site.web.util.WebConstantDeclaration.VIEW_503_ERROR;
 import static by.epam.periodicials_site.web.util.WebConstantDeclaration.VIEW_EDIT_THEMES;
 
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.dto.LocalizedTheme;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.ThemeService;

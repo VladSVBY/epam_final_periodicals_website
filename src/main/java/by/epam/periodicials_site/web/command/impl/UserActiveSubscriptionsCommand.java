@@ -12,6 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.Publication;
 import by.epam.periodicials_site.entity.Subscription;
@@ -23,6 +26,8 @@ import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
 public class UserActiveSubscriptionsCommand implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(UserActiveSubscriptionsCommand.class);
 	
 	private SubscriptionService subscriptionService = ServiceFactory.getSubscriptionService();
 	private PublicationService publicationService = ServiceFactory.getPublicationService();
@@ -40,14 +45,16 @@ public class UserActiveSubscriptionsCommand implements Command {
 				Publication publication = publicationService.read(subscription.getPublicationId(), locale);
 				publicationNames.put(publication.getId(), publication.getName());
 			}
+			
+			request.setAttribute(REQUEST_ATTR_ACTIVE_SUBSCRIPTION_LIST, subscriptions);
+			request.setAttribute(REQUEST_ATTR_PUBLICATION_NAMES, publicationNames);
+			request.getRequestDispatcher(VIEW_USER_ACTIVE_SUBSCRIPTIONS).forward(request, response);
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception showing user active subscriptions", e);
+			request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
 		}
 		
-		request.setAttribute(REQUEST_ATTR_ACTIVE_SUBSCRIPTION_LIST, subscriptions);
-		request.setAttribute(REQUEST_ATTR_PUBLICATION_NAMES, publicationNames);
-		request.getRequestDispatcher(VIEW_USER_ACTIVE_SUBSCRIPTIONS).forward(request, response);
+		
 	}
 
 }

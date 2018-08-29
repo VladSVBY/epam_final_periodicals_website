@@ -41,7 +41,7 @@
 	<div class="content">
 		<div class="center">
 			<div id="publication">
-				<img src="${contextPath}/resources/img/${publication.picturePath}" id="picture"/>
+				<img src="<c:url value="/resources/img/${publication.picturePath}" />" id="picture"/>
 				<div id="description">
 					<p><b>${publication_header}:</b> ${publication.name}</p>
 					<p><b>${theme_header}:</b> ${publication.name}</p>

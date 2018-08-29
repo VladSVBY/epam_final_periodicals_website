@@ -26,6 +26,10 @@
 		<class>by.epam.periodicials_site.web.command.impl.ShowPublicationCommand</class>
 		<url-pattern>/publication</url-pattern>
 	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.ShowResultPageCommand</class>
+		<url-pattern>/show-result-page</url-pattern>
+	</command>
 	
 	
 	<command>

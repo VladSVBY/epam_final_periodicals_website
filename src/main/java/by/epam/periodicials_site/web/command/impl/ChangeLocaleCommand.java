@@ -17,10 +17,12 @@ public class ChangeLocaleCommand implements Command{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String locale =  request.getParameter(REQUEST_PARAM_LOCALE);
 		HttpSession session = request.getSession();
 		session.setAttribute(SESSION_ATTR_LOCALE, locale);
 		response.sendRedirect(HttpUtil.getReferPage(request));
+		
 	}
 
 }

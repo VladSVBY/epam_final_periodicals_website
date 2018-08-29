@@ -2,48 +2,41 @@ package by.epam.periodicials_site.web.command.impl;
 
 import static by.epam.periodicials_site.web.util.WebConstantDeclaration.*;
 
-
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.periodicials_site.entity.BalanceOperation;
 import by.epam.periodicials_site.entity.BalanceOperationType;
-import by.epam.periodicials_site.entity.LocaleType;
-import by.epam.periodicials_site.entity.Publication;
-import by.epam.periodicials_site.entity.Role;
-import by.epam.periodicials_site.entity.Theme;
-import by.epam.periodicials_site.entity.User;
-import by.epam.periodicials_site.entity.dto.PublicationSearchCriteria;
 import by.epam.periodicials_site.service.BalanceOperationService;
-import by.epam.periodicials_site.service.PublicationService;
 import by.epam.periodicials_site.service.ServiceFactory;
-import by.epam.periodicials_site.service.ThemeService;
-import by.epam.periodicials_site.service.UserService;
 import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
 public class ReplenishBalanceCommand implements Command {
 	
+	private static final Logger logger = LogManager.getLogger(ReplenishBalanceCommand.class);
+	
 	private BalanceOperationService balanceOperationService = ServiceFactory.getBalanceOperationService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BalanceOperation balanceOperation = formBalanceOperation(request);
-		
+		BalanceOperation balanceOperation = formBalanceOperation(request);		
 		try {
 			balanceOperationService.create(balanceOperation);
+			
+			response.sendRedirect(HttpUtil.formRedirectUrl(request, COMMAND_SHOW_USER_PROFILE));
 		} catch (ServiceException e) {
-			// TODO logger
-			e.printStackTrace();
+			logger.error("Exception replenishing user balance", e);
+			request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
 		}
-		
-		response.sendRedirect(HttpUtil.formRedirectUrl(request, COMMAND_SHOW_USER_PROFILE));
 	}
 	
 	private BalanceOperation formBalanceOperation(HttpServletRequest request) {

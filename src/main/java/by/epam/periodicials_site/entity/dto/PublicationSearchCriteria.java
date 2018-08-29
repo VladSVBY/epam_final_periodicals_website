@@ -6,6 +6,7 @@ public class PublicationSearchCriteria {
 	
 	private LocaleType locale;
 	private int themeId;
+	private int typeId;
 	private int orderId;
 	private int currentPage;
 	private int itemsPerPage;
@@ -52,6 +53,14 @@ public class PublicationSearchCriteria {
 
 	public void setItemsPerPage(int itemsPerPage) {
 		this.itemsPerPage = itemsPerPage;
+	}
+
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
 	}
 	
 }

@@ -25,7 +25,7 @@ public class AdminAccessFilter implements Filter {
     	
     	if (role == null){
     		httpResponse.sendRedirect(HttpUtil.formRedirectUrl(httpRequest, WebConstantDeclaration.COMMAND_LOGIN));
-    	} else if (role.equals(Role.ADMIN)) {
+    	} else if (role == Role.ADMIN) {
     		chain.doFilter(httpRequest, httpResponse);
     	} else {
     		httpResponse.sendRedirect(HttpUtil.formRedirectUrl(httpRequest, WebConstantDeclaration.COMMAND_HOME));

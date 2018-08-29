@@ -19,6 +19,19 @@ public class User implements Serializable{
 		super();
 	}
 
+	public User(Integer id, String login, String password, String name, String surName, String email, double balance,
+			Role role) {
+		super();
+		this.id = id;
+		this.login = login;
+		this.password = password;
+		this.name = name;
+		this.surName = surName;
+		this.email = email;
+		this.balance = balance;
+		this.role = role;
+	}
+
 	public Integer getId() {
 		return id;
 	}

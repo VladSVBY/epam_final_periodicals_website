@@ -4,13 +4,14 @@ import static by.epam.periodicials_site.web.util.WebConstantDeclaration.*;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import by.epam.periodicials_site.entity.Issue;
 import by.epam.periodicials_site.entity.LocaleType;
@@ -25,6 +26,8 @@ import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
 public class ShowIssuesCommand implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(ShowIssuesCommand.class);
 	
 	private SubscriptionService subscriptionService = ServiceFactory.getSubscriptionService();
 	private IssueService issueService = ServiceFactory.getIssueService();
@@ -46,10 +49,11 @@ public class ShowIssuesCommand implements Command {
 			
 			request.setAttribute(REQUEST_ATTR_ISSUES, issues);
 			request.setAttribute(REQUEST_ATTR_PUBLICATION, publication);
+			request.getRequestDispatcher(VIEW_AVALIABLE_ISSUES).forward(request, response);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			logger.error("Exception showing issues", e);
+			request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
 		}
-		request.getRequestDispatcher(VIEW_AVALIABLE_ISSUES).forward(request, response);
 	}
 
 }
