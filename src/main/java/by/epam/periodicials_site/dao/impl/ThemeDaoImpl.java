@@ -27,10 +27,11 @@ public class ThemeDaoImpl implements ThemeDao{
 	private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 	
 	private static final String READ_ALL_WITH_LOCALE = "SELECT themes.id, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme WHERE locale=?";
-	private static final String READ_ALL = "SELECT themes.id, default_name, locale, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme SORT BY themes.id";
-	private static final String CREATE_MAIN_INFO = "INSERT INTO `periodicals_website`.`themes` (`default_name`) VALUES ('?')";
+	private static final String READ_WITH_LOCALE = "SELECT themes.id, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme WHERE themes.id=? locale=?";
+	private static final String READ_ALL = "SELECT themes.id, default_name, locale, name FROM themes JOIN themes_local ON themes.id=themes_local.id_theme ORDER BY themes.id";
+	private static final String CREATE_MAIN_INFO = "INSERT INTO `periodicals_website`.`themes` (`default_name`) VALUES (?)";
 	private static final String CREATE_LOCALIZED_INFO = "INSERT INTO `periodicals_website`.`themes_local` (`id_theme`, `locale`, `name`) VALUES (?, ?, ?);";
-	private static final String UPDATE_MAIN_INFO = "UPDATE `periodicals_website`.`themes` SET `default_name`='hd' WHERE `id`=?";
+	private static final String UPDATE_MAIN_INFO = "UPDATE `periodicals_website`.`themes` SET `default_name`=? WHERE `id`=?";
 	private static final String UPDATE_LOCALIZED_INFO = "UPDATE `periodicals_website`.`themes_local` SET `name`=? WHERE `id_theme`=? and`locale`=?";
 	
 	private static final String ID = "id";
@@ -45,8 +46,9 @@ public class ThemeDaoImpl implements ThemeDao{
 				PreparedStatement ps = connection.prepareStatement(READ_ALL_WITH_LOCALE)
 		){
 			ps.setString(1, locale.name());			
-			ps.executeQuery();			
+		
 			ResultSet resultSet = ps.executeQuery();
+			
 			while (resultSet.next()) {
 				Theme theme = formTheme(resultSet);
 				themes.add(theme);
@@ -55,8 +57,28 @@ public class ThemeDaoImpl implements ThemeDao{
 		} catch (SQLException e) {
 			throw new DaoException("Exception reading themes", e);
 		}
-	} 
+	}
 	
+	@Override
+	public Theme read(Integer id, LocaleType locale) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(READ_WITH_LOCALE)
+		){	
+			ps.setInt(1, id);
+			ps.setString(1, locale.name());
+			
+			ResultSet resultSet = ps.executeQuery();
+			
+			Theme theme = null;
+			if (resultSet.next()) {
+				theme = formTheme(resultSet);
+			}
+			return theme;
+		} catch (SQLException e) {
+			throw new DaoException("Exception reading theme", e);
+		}
+	}
+
 	@Override
 	public List<LocalizedTheme> readAllLocalized() throws DaoException {
 		List<LocalizedTheme> localizedThemes = new ArrayList<>();
@@ -95,9 +117,9 @@ public class ThemeDaoImpl implements ThemeDao{
 			psMain.executeUpdate();
 			
 			for (LocaleType locale : LocaleType.values()) {
-				psAdditional.setString(1, locale.name());
+				psAdditional.setString(1, localizedTheme.getLocalizedNames().get(locale));
 				psAdditional.setInt(2, localizedTheme.getId());
-				psAdditional.setString(3, localizedTheme.getLocalizedNames().get(locale));
+				psAdditional.setString(3, locale.name());
 				psAdditional.executeUpdate();
 			}
 			
@@ -136,7 +158,7 @@ public class ThemeDaoImpl implements ThemeDao{
 			
 			ResultSet rSet = psMain.getGeneratedKeys();
 			rSet.next();
-			localizedTheme.setId(rSet.getShort(ID));
+			localizedTheme.setId(rSet.getShort(1));
 			
 			for (LocaleType locale : LocaleType.values()) {
 				psAdditional.setInt(1, localizedTheme.getId());

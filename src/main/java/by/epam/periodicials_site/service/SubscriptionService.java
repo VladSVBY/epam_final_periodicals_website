@@ -2,13 +2,12 @@ package by.epam.periodicials_site.service;
 
 import java.util.List;
 
-import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.Subscription;
 import by.epam.periodicials_site.service.exception.ServiceException;
 
 public interface SubscriptionService {
 	
-	List<Subscription> readActiveForUser(int userId);
+	List<Subscription> readActiveForUser(int userId) throws ServiceException;
 	
 	List<Subscription> readNonActiveForUser(int userId) throws ServiceException;
 	

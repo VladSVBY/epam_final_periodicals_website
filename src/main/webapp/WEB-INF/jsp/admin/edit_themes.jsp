@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@ page import ="by.epam.periodicials_site.entity.LocaleType" %>
+
 <fmt:setLocale value="${sessionScope.locale}"/>	
 <fmt:bundle basename="localization.local" prefix = "user_menu.">
 	<fmt:message key="profile_option" var="profile_option"/>
@@ -74,84 +76,40 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
 		<div class="bg-success text-white text-center" >
-			<h4>${main_header }</h4>
+			<h4>Add new theme:</h4>
 		</div>
 
-		<form action="${contextPath}/controller/admin/add-publication" method="post" enctype="multipart/form-data">	
-						<div class="input-group mb-2" >
-						  <div class="input-group-prepend">
-						    <label class="input-group-text" for="theme">${theme_select}:</label>
-						  </div>
-						  <select class="custom-select col-md-5" name="theme" id="theme">
-						    <c:forEach items="${themes}" var="theme">
-						    	<option value="${theme.id}">${theme.name }</option>
-						    </c:forEach>
-						  </select>
-						 </div>
-						<div class="input-group mb-2" >
-						  <div class="input-group-prepend">
-						    <label class="input-group-text" for="type">${type_select}:</label>
-						  </div>
-						  <select class="custom-select col-md-5" name="type" id="type">
-						    <option value="0">0</option>
-						    <option value="1">1</option>
-						    <option value="2">2</option>
-						    <option value="3">3</option>
-						    <option value="4">4</option>
-						    <option value="5">5</option>
-						  </select>
-						</div>				
-			<div class="row">					
-				<div class="col" style="border-bottom: thin solid black; border-right: thin solid black; border-top: thin solid black;">					
-					<div class="form-group font-weight-bold">					
-						${version_ru }
-					</div>
-					<div class="form-group">					
+		<form action="${contextPath}/controller/admin/add-theme" method="post">			 	
+			<div class="row">
+					<div class="form-group col-5">					
 						<input type="text" class="form-control" placeholder="${name}" name="name_ru" id="name_ru">
 					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="${description}" name="description_ru" id="description_ru">
-					</div>					
-				</div>
-				
-				<div class="col" style="border-bottom : thin solid black; border-top: thin solid black;">					
-					<div class="form-group font-weight-bold">					
-						${version_en}
-					</div>					
-					<div class="form-group">					
+					<div class="form-group col-5">					
 						<input type="text" class="form-control" placeholder="${name}" name="name_en" id="name_en">
 					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="${description}" name="description_en" id="description_en">
-					</div>									
-				</div>
-			</div>
-			<div class="row">	
-				<div class="col">
-					<div class="form-group">
-						${price}
-						<input type="number" class="form-control" name="price" id="price" value="0" min=0 >
+					<div class="form-group col-2">					
+						<button type="submit" class="btn btn-success">${add_button }</button>
 					</div>
-				</div>	
-			</div>
-			<div class="form-group">
-				<div class="form-group">
-						<label for="pivture">Picture:</label> 
-						<input type="file" class="form-control-file" name="picture" id="picture">																						
-					</div>
-			</div>	 	
-					
-			<button type="submit" class="btn btn-success">${add_button }</button>		
+			</div>				
 		</form>	
 		
 		<c:forEach items="${themes}" var="theme">
-			<div class="row">
-				<form action="${contextPath}/controller/admin/update-theme" method="post">
-					<input type="hidden" value="${theme.id}" />
-					${theme.id}
-					<input value="${theme.name}">
-				</form>
-			</div>
+			<form action="${contextPath}/controller/admin/update-theme" method="post">			 	
+				<div class="row">
+						<div class="form-group col-1">					
+							<input type="text" class="form-control" name="theme" value="${theme.id}" readonly="readonly"/>
+						</div>
+						<div class="form-group col-5">					
+							<input type="text" class="form-control" placeholder="${name}" name="name_ru" id="name_ru" value="${theme.getLocalizedNames().get(LocaleType.RU_BY)}">
+						</div>
+						<div class="form-group col-5">					
+							<input type="text" class="form-control" placeholder="${name}" name="name_en" id="name_by" value="${theme.getLocalizedNames().get(LocaleType.EN_US)}">
+						</div>
+						<div class="form-group col-1">					
+							<button type="submit" class="btn btn-success">Update</button>
+						</div>
+				</div>				
+			</form>
 		</c:forEach>	
         </main>
       </div>

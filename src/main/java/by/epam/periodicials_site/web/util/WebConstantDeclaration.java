@@ -45,6 +45,8 @@ public final class WebConstantDeclaration {
 	public static final String REQUEST_PARAM_ISSUE_FILE = "issue_file";
 	public static final String REQUEST_PARAM_START_MONTH = "start_month";
 	public static final String REQUEST_PARAM_SUBSCRIPTION_DURATION = "duration";
+	public static final String REQUEST_PARAM_NAME_EN = "name_en";
+	public static final String REQUEST_PARAM_NAME_RU = "name_ru";
 	
 	public static final String SESSION_ATTR_LOCALE = "locale";
 	public static final String SESSION_ATTR_REFER_PAGE = "referPage";

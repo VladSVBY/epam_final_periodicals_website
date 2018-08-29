@@ -25,14 +25,16 @@ public class LoginCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String referPage = HttpUtil.getReferPage(request);
-		if (!referPage.endsWith(COMMAND_LOGIN)) {
-			request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
-		} else {
-			
+		if (!referPage.contains(COMMAND_LOGIN) && !referPage.contains(COMMAND_REGISTER)){
+			request.getSession().setAttribute(SESSION_ATTR_REFER_PAGE, referPage);
+		} 
+		if (referPage.contains(COMMAND_LOGIN)) {			
 			String loginOrEmail = request.getParameter(REQUEST_PARAM_LOGIN_OR_EMAIL);
 			String password = request.getParameter(REQUEST_PARAM_PASSWORD);
-			User user = null;;
+			User user = null;
+			
 			try {
+				System.out.println(password);
 				user = userService.getUser(loginOrEmail, password);
 			} catch (ServiceException e) {
 				// logger
@@ -47,8 +49,13 @@ public class LoginCommand implements Command {
 				session.setAttribute(SESSION_ATTR_USER_ID, user.getId());
 				session.setAttribute(SESSION_ATTR_USER_NAME, user.getName());
 				session.setAttribute(SESSION_ATTR_USER_ROLE, user.getRole());
-				response.sendRedirect(HttpUtil.formRedirectUrl(request, COMMAND_HOME));
+				
+				String path = (String) request.getSession().getAttribute(SESSION_ATTR_REFER_PAGE);
+				path = (path != null) ? path : HttpUtil.formRedirectUrl(request, COMMAND_HOME);
+				response.sendRedirect(path);
 			}
+		} else {
+			request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
 		}
 	}
 	

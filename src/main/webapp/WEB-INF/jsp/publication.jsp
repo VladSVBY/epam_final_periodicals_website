@@ -41,7 +41,7 @@
 	<div class="content">
 		<div class="center">
 			<div id="publication">
-				<img src="<c:url value="/resources/img/${publication.picturePath}" />" id="picture"/>
+				<img src="${contextPath}/resources/img/${publication.picturePath}" id="picture"/>
 				<div id="description">
 					<p><b>${publication_header}:</b> ${publication.name}</p>
 					<p><b>${theme_header}:</b> ${publication.name}</p>
@@ -128,11 +128,7 @@
 				  		<input type="file" required="required" name="issue_file" id="issue_file">
 					</div>
 					<button type="submit" class="btn btn-primary" style="margin-top: 10px">${update_review_button }</button>
-				</form>
-				
-				
-				
-				
+				</form>		
 				
 			</div>
 			<div id="reviews">

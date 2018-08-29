@@ -9,6 +9,8 @@ import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.entity.BalanceOperation;
 import by.epam.periodicials_site.service.BalanceOperationService;
 import by.epam.periodicials_site.service.exception.ServiceException;
+import by.epam.periodicials_site.service.exception.ValidationException;
+import by.epam.periodicials_site.service.util.Validator;
 
 public class BalanceOperationServiceImpl implements BalanceOperationService {
 	
@@ -19,17 +21,20 @@ public class BalanceOperationServiceImpl implements BalanceOperationService {
 		try {
 			balanceOperations = balanceOperationDao.readForUser(userID);
 		} catch (DaoException e) {
-			throw new ServiceException("Exception reading balance operations", e);
+			throw new ServiceException(e);
 		}
 		return balanceOperations;
 	}
 
 	@Override
 	public void create(BalanceOperation balanceOperation) throws ServiceException {
+		if (!Validator.balanceOperationIsValid(balanceOperation)) {
+			throw new ValidationException("Balance operation data is not valid");
+		}
 		try {
 			balanceOperationDao.create(balanceOperation);
 		} catch (DaoException e) {
-			throw new ServiceException("Exception creating balance operations", e);
+			throw new ServiceException(e);
 		}
 	}
 

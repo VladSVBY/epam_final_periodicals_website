@@ -1,46 +1,83 @@
 package by.epam.periodicials_site.service.util;
 
+import java.util.List;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.mail.Authenticator;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import by.epam.periodicials_site.entity.Issue;
+import by.epam.periodicials_site.entity.LocaleType;
+import by.epam.periodicials_site.entity.User;
+import by.epam.periodicials_site.entity.dto.LocalizedPublication;
+
 public class MailSender {
 	
-	public static void main(String[] args) {
-		String to = "vladsvby@yandex.by";
-		String from = "website@mail.com";
-		
-		Properties props = System.getProperties();
-		props.setProperty("mail.smtp.host", "smtp.gmail.com");		
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.port", "587");
-		props.put("mail.smtp.auth", "true");
+	private static final Logger logger = LogManager.getLogger(MailSender.class);
+	
+	private static final String AUTH_EMAIL = "auth.email";
+	private static final String AUTH_PASSWORD = "auth.password";
+	private static final String AUTH_PROPERTIES = "mail_authentication";
+	private static final String FROM_HEADER = "periodicials.site@mail.com";
+	private static final String SUBJECT_HEADER = "New issue on the Periodicials site";
+	
+	private static final String MESSAGE_TEXT = " Hello, %s %s!\n\n"
+			+ "We have a new issue of the %s - %s\n\n";
+	
+	private static final Properties props;
+	
+	static {
+		props = System.getProperties();
+		ResourceBundle bundle = ResourceBundle.getBundle("mail");
+		for (String key : bundle.keySet()) {
+			props.put(key, bundle.getString(key));
+		}
+	}
+	
+	public static void sendNotifications(List<User> users, Issue issue, LocalizedPublication localizedPublication) {
+		ResourceBundle authData = ResourceBundle.getBundle(AUTH_PROPERTIES);
+			
 		Authenticator authenticator = new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("vladossv@gmail.com", "23431993v");
+                return new PasswordAuthentication(authData.getString(AUTH_EMAIL), authData.getString(AUTH_PASSWORD));
 			}
 		};
-		
+				
+		try {
+			for (User user : users) {
+				MimeMessage message = formMessage(authenticator, user, issue, localizedPublication);
+				Transport.send(message);
+			}
+		} catch (MessagingException e) {
+			logger.warn("Exception sending email", e);
+		}
+
+	}
+	
+	private static MimeMessage formMessage(Authenticator authenticator , User user, Issue issue, LocalizedPublication localizedPublication) throws AddressException, MessagingException {
 		Session session = Session.getDefaultInstance(props, authenticator);
 		MimeMessage message = new MimeMessage(session);
-		try {
-			message.setFrom(from);
-			message.setRecipient(RecipientType.TO, new InternetAddress(to));
-			message.setSubject("Java sender");
-			message.setText("Hello from your programm");
-			Transport.send(message);
-			System.out.println("sended");
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		message.setFrom(FROM_HEADER);
+		message.setRecipient(RecipientType.TO, new InternetAddress(user.getEmail()));
+		message.setSubject(SUBJECT_HEADER);
+		message.setText(String.format(MESSAGE_TEXT, user.getName(),
+													user.getSurName(), 
+													localizedPublication.getNames().get(LocaleType.EN_US),
+													issue.getDescription()));
+		
+		return message;
 	}
 
 }

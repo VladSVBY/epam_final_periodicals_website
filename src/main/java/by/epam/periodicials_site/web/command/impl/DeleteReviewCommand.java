@@ -29,6 +29,7 @@ public class DeleteReviewCommand implements Command {
 			int reviewId = Integer.parseInt(request.getParameter(REQUEST_PARAM_REVIEW_ID));			
 			
 			reviewService.delete(reviewId);
+			
 			response.sendRedirect(HttpUtil.getReferPage(request));
 		} catch (ServiceException e) {
 			logger.error("Exception deleteing review", e);

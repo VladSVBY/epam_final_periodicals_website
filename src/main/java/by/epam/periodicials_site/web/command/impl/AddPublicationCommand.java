@@ -1,5 +1,7 @@
 package by.epam.periodicials_site.web.command.impl;
 
+import static by.epam.periodicials_site.web.util.WebConstantDeclaration.VIEW_503_ERROR;
+
 import java.io.IOException;
 
 import java.util.EnumMap;
@@ -9,15 +11,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.periodicials_site.entity.LocaleType;
 import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.service.PublicationService;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.exception.ServiceException;
+import by.epam.periodicials_site.service.exception.ValidationException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
 public class AddPublicationCommand implements Command {
+	
+	private static final Logger logger = LogManager.getLogger(AddPublicationCommand.class);
 	
 	private PublicationService publicationService = ServiceFactory.getPublicationService();
 
@@ -25,13 +33,16 @@ public class AddPublicationCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			LocalizedPublication localizedPublication = formLocalizedPublication(request);
+			
 			publicationService.add(localizedPublication);
-			System.out.println(request.getParameter("date_of_publication"));
-		} catch (ServiceException e) {
+		} catch (ValidationException e) {
 			// TODO logger
 			e.printStackTrace();
-		}
-		
+		}	
+		catch (ServiceException e) {
+			logger.error("Exception adding publication", e);
+			request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
+		}		
 	}
 	
 	private LocalizedPublication formLocalizedPublication(HttpServletRequest request) throws IOException, ServletException {

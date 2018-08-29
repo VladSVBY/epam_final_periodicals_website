@@ -23,22 +23,37 @@
 		<title>${title}</title>
 		<link href="<c:url value="/resources/css/login.css" />" rel="stylesheet" />
 		<link href="<c:url value="/resources/css/bootstrap/bootstrap.min.css" />" rel="stylesheet"> 
+		<script type="text/javascript" src="<c:url value="/resources/js/sha512.js" />"></script>
 	</head>
 <body>
 
 	<%@include file="nav.jsp" %>
 	
-	<form action="<c:url value="login" />" id="login" method="post">
+	<form action="${contextPath}/controller/login" id="login" method="post" onsubmit="">
 	    <h1>${main_header}</h1>
 	    <fieldset id="inputs">
 	        <input id="username" name="login_or_email" type="text" placeholder="${placeholder_login}" required autofocus />   
-	        <input  id="password" name="password" type="password" placeholder="${placeholder_password}" required />
+	        <input  id="password" name="real_password" type="password" placeholder="${placeholder_password}" />
 	    </fieldset>
 	    <span style="color: red"><c:if test="${loginFailedMsg != null}">${msg_login_failed}</c:if></span>
 	    <fieldset id="actions">
-	        <input type="submit" id="submit" value="${button_login}">
+	        <input type="submit" id="submit" value="${button_login}" onclick="formHash(this.form, this.form.real_password)">
 	        <a href="register">${link_register}</a>
 	    </fieldset>
 	</form>
+	
+	<script type= "text/javascript">
+		function formHash(form, real_password)
+			{
+				var hashPassword = document.createElement("input");
+				form.appendChild(hashPassword);
+				hashPassword.name = "password";
+				hashPassword.type = "hidden";
+				hashPassword.value = hex_sha512(real_password.value)
+				real_password.value = "";
+				form.submit();
+				return true;
+			}
+	</script>
 </body>
 </html>

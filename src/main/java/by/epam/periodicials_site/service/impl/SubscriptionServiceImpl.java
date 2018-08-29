@@ -1,7 +1,5 @@
 package by.epam.periodicials_site.service.impl;
 
-import java.text.DateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -10,7 +8,6 @@ import java.util.List;
 
 import by.epam.periodicials_site.dao.DaoException;
 import by.epam.periodicials_site.dao.DaoFactory;
-import by.epam.periodicials_site.dao.PublicationDao;
 import by.epam.periodicials_site.dao.SubscriptionDao;
 import by.epam.periodicials_site.entity.BalanceOperation;
 import by.epam.periodicials_site.entity.BalanceOperationType;
@@ -30,7 +27,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 	private PublicationService publicationService = ServiceFactory.getPublicationService();
 
 	@Override
-	public List<Subscription> readActiveForUser(int userId) {
+	public List<Subscription> readActiveForUser(int userId) throws ServiceException {
 		List<Subscription> subscriptions = Collections.emptyList();
 		try {
 			subscriptions = subscriptionDao.readActiveForUser(userId);
@@ -46,8 +43,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 				}
 			}
 		} catch (DaoException e) {
-			// TODO logger
-			e.printStackTrace();
+			throw new ServiceException(e);
 		}
 		return subscriptions;
 	}
@@ -147,7 +143,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 		}
 	}
 
-	private double calculateSumForRefund(int monthToExpiration, int publicationID) {
+	private double calculateSumForRefund(int monthToExpiration, int publicationID) throws ServiceException {
 		Publication publication = publicationService.read(publicationID, LocaleType.EN_US);
 		return monthToExpiration * publication.getPrice();
 	}

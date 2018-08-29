@@ -6,6 +6,7 @@ import by.epam.periodicials_site.service.impl.PublicationServiceImpl;
 import by.epam.periodicials_site.service.impl.ReviewServiceImpl;
 import by.epam.periodicials_site.service.impl.SubscriptionServiceImpl;
 import by.epam.periodicials_site.service.impl.ThemeServiceImpl;
+import by.epam.periodicials_site.service.impl.TypeServiceImpl;
 import by.epam.periodicials_site.service.impl.UserServiceImpl;
 
 public final class ServiceFactory {
@@ -13,6 +14,7 @@ public final class ServiceFactory {
 	private ServiceFactory() {}
 	
 	private static final ThemeService THEME_SERVICE = new ThemeServiceImpl();
+	private static final TypeService TYPE_SERVICE = new TypeServiceImpl();
 	private static final UserService USER_SERVICE = new UserServiceImpl();
 	private static final PublicationService PUBLICATION_SERVICE = new PublicationServiceImpl();
 	private static final SubscriptionService SUBSCRIPTION_SERVICE = new SubscriptionServiceImpl();
@@ -46,6 +48,10 @@ public final class ServiceFactory {
 
 	public static IssueService getIssueService() {
 		return ISSUE_SERVICE;
+	}
+
+	public static TypeService getTypeService() {
+		return TYPE_SERVICE;
 	} 
 	
 }

@@ -34,14 +34,18 @@ public class RegisterCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String referPage = HttpUtil.getReferPage(request);
-		if (!referPage.endsWith(COMMAND_REGISTER)) {
-			request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
-		} else {
+		if (!referPage.contains(COMMAND_LOGIN) && !referPage.contains(COMMAND_REGISTER)){
+			request.getSession().setAttribute(SESSION_ATTR_REFER_PAGE, referPage);
+		} 
+		if (referPage.contains(COMMAND_REGISTER)) {
 			LocaleType locale = HttpUtil.getLocale(request);
 			try {
+				
 				User user = formUser(request);
 				userService.registerUser(user);
-				response.sendRedirect(HttpUtil.formRedirectUrl(request, COMMAND_LOGIN));
+				String path = (String) request.getSession().getAttribute(SESSION_ATTR_REFER_PAGE);
+				path = (path != null) ? path : HttpUtil.formRedirectUrl(request, COMMAND_HOME);
+				response.sendRedirect(path);
 				
 			} catch (LoginAlreadyExistsException e) {
 				String message = MessageResolver.getMessage(LOGIN_EXISTS_MESSAGE, locale);
@@ -58,6 +62,8 @@ public class RegisterCommand implements Command {
 				logger.error("Exception registrating user", e);
 				request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);
 			}	
+		} else {
+			request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
 		}
 	}
 	

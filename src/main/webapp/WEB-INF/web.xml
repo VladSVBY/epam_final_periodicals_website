@@ -34,7 +34,7 @@
 		<url-pattern>/controller/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- <filter>
+	<filter>
 		<filter-name>AdminFilter</filter-name>
 		<filter-class>by.epam.periodicials_site.web.filter.AdminAccessFilter</filter-class>
 	</filter>
@@ -50,7 +50,7 @@
 	<filter-mapping>
 		<filter-name>UserFilter</filter-name>
 		<url-pattern>/user/*</url-pattern>
-	</filter-mapping> -->
+	</filter-mapping>
 	
 	<jsp-config>
 		<taglib>

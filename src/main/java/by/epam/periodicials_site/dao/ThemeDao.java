@@ -10,6 +10,8 @@ public interface ThemeDao {
 	
 	List<Theme> readAll(LocaleType locale) throws DaoException;
 	
+	Theme read(Integer id, LocaleType locale) throws DaoException;
+	
 	List<LocalizedTheme> readAllLocalized() throws DaoException;
 	
 	void update(LocalizedTheme localizedTheme) throws DaoException;

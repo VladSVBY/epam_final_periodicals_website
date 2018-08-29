@@ -56,6 +56,14 @@
 		<class>by.epam.periodicials_site.web.command.impl.UploadIssueCommand</class>
 		<url-pattern>/admin/upload-issue</url-pattern>
 	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.UpdateThemeCommand</class>
+		<url-pattern>/admin/update-theme</url-pattern>
+	</command>
+	<command>
+		<class>by.epam.periodicials_site.web.command.impl.AddThemeCommand</class>
+		<url-pattern>/admin/add-theme</url-pattern>
+	</command>
 	
 	<command>
 		<class>by.epam.periodicials_site.web.command.impl.ShowIssuesCommand</class>

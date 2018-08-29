@@ -24,7 +24,9 @@ public class GetAddPublicationFormCommand implements Command{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			LocaleType locale = HttpUtil.getLocale(request);
+			
 			List<Theme> themes = themeService.readAll(locale);
+			
 			request.setAttribute(WebConstantDeclaration.REQUEST_ATTR_THEMES, themes);
 			request.getRequestDispatcher(WebConstantDeclaration.VIEW_ADD_PUBLICATION_FORM).forward(request, response);
 		} catch (ServiceException e) {

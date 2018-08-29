@@ -10,9 +10,9 @@ import by.epam.periodicials_site.service.exception.ServiceException;
 
 public interface PublicationService {
 	
-	List<Publication> readAll(PublicationSearchCriteria criteria);
+	List<Publication> readAll(PublicationSearchCriteria criteria) throws ServiceException;
 	
-	Publication read(int id, LocaleType locale);
+	Publication read(int id, LocaleType locale) throws ServiceException;
 	
 	void add(LocalizedPublication localizedPublication) throws ServiceException;
 	

@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import by.epam.periodicials_site.dao.DaoException;
 import by.epam.periodicials_site.dao.UserDao;
@@ -15,8 +19,9 @@ import by.epam.periodicials_site.entity.User;
 
 public class UserDaoImpl implements UserDao{
 	
-	private static final String READ_USER = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE (login=? OR email=?) AND password=?";
+	private static final String READ_USER_WITH_EMAIL_OR_LOGIN = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE (login=? OR email=?) AND password=?";
 	private static final String READ_USER_WITH_ID = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE users.id=?";
+	private static final String READ_USERS_WITH_SUBSCRIPTION = "SELECT DISTINCT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id JOIN subscriptions ON users.id=subscriptions.id_user WHERE id_publication=? AND ? BETWEEN TIMESTAMP(start_date) AND TIMESTAMP(end_date)";
 	private static final String CREATE_USER = "INSERT INTO `periodicals_website`.`users` (`login`, `password`, `name`, `surname`, `email`) VALUES (?, ?, ?, ?, ?)";
 	private static final String ADD_TO_USER_BALANCE = "UPDATE `periodicals_website`.`users` SET `balance`=(SELECT balance + ? FROM (SELECT balance FROM users WHERE id=?) res) WHERE `id`=?";
 	private static final String REMOVE_FROM_USER_BALANCE = "UPDATE `periodicals_website`.`users` SET `balance`=(SELECT balance - ? FROM (SELECT balance FROM users WHERE id=?) res) WHERE `id`=?";
@@ -65,7 +70,7 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public User readByLoginOrEmailAndPassword(String loginOrEmail, String password) throws DaoException {
 		try (Connection connection = connectionPool.getConnection(); 
-				PreparedStatement ps = connection.prepareStatement(READ_USER)){
+				PreparedStatement ps = connection.prepareStatement(READ_USER_WITH_EMAIL_OR_LOGIN)){
 			ps.setString(1, loginOrEmail);
 			ps.setString(2, loginOrEmail);
 			ps.setString(3, password);
@@ -132,6 +137,26 @@ public class UserDaoImpl implements UserDao{
 			throw new DaoException("Exception finding login", e);
 		}
 		return false;
+	}
+
+	@Override
+	public List<User> readUsersHavingSuscription(int publicationId, Date date) throws DaoException {
+		List<User> users = new ArrayList<>();
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(READ_USERS_WITH_SUBSCRIPTION)){
+			ps.setInt(1, publicationId);
+			ps.setTimestamp(2, new Timestamp(date.getTime()));
+			
+			ResultSet resultSet = ps.executeQuery();
+			
+			while (resultSet.next()) {
+				User user = createUser(resultSet);
+				users.add(user);
+			}			
+		} catch (SQLException e) {
+			throw new DaoException("Exception reading user", e);
+		}
+		return users;
 	}
 
 	private User createUser(ResultSet resultSet) throws SQLException {

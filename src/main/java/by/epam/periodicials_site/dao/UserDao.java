@@ -1,6 +1,8 @@
 package by.epam.periodicials_site.dao;
 
 import java.sql.Connection;
+import java.util.Date;
+import java.util.List;
 
 import by.epam.periodicials_site.entity.User;
 
@@ -19,4 +21,6 @@ public interface UserDao {
 	boolean loginExists(String login) throws DaoException;
 	
 	boolean emailExists(String email) throws DaoException;
+	
+	List<User> readUsersHavingSuscription(int publicationId, Date date) throws DaoException;
 }

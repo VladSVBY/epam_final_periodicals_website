@@ -14,7 +14,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public final class ConnectionPool {
+	
+	private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
 	
 	private static ConnectionPool instance;
 	
@@ -99,8 +104,7 @@ public final class ConnectionPool {
 			entry.getKey().realClose();		
 	}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception closing connections", e);
 		}
 	}
 	
@@ -115,7 +119,7 @@ public final class ConnectionPool {
 		try {
 			Class.forName(driverName);
 		} catch (ClassNotFoundException e) {
-			// TODO logger
+			logger.error("Driver not found", e);
 			throw new ConnectionPoolException("ConnectionPool initialization failed" ,e);
 		}
 	}
@@ -128,7 +132,7 @@ public final class ConnectionPool {
 				createConnection();
 			}
 		} catch (SQLException e) {
-			// TODO logger
+			logger.error("Connection initialization failed", e);
 			throw new ConnectionPoolException("Connection initialization failed", e);
 		}
 	}
@@ -162,7 +166,7 @@ public final class ConnectionPool {
 						Thread.sleep(TimeUnit.MINUTES.toMillis(INTERVAL_BETWEEN_CHECKS_MINUTES));
 					}
 				} catch (InterruptedException e) {
-					// TODO logger
+					logger.warn("PoolChecker stoped", e);
 			}
 		}
 		
@@ -177,8 +181,7 @@ public final class ConnectionPool {
 						currentConnectionNumber.decrementAndGet();
 					}
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.warn("Exception removin closed connection", e);
 				}
 			}
 		}

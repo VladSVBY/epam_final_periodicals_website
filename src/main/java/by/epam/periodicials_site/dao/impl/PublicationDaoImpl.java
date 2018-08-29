@@ -256,6 +256,7 @@ public class PublicationDaoImpl implements PublicationDao{
 	private String formQuery(PublicationSearchCriteria criteria) {
 		StringBuilder query = new StringBuilder(String.format(READ_ALL_WITH_LOCALE, criteria.getLocale().name()));
 		setTheme(query, criteria);
+		setType(query, criteria);
 		setOrder(query, criteria);
 		setLimit(query, criteria);
 		return query.toString();
@@ -264,6 +265,12 @@ public class PublicationDaoImpl implements PublicationDao{
 	private void setTheme(StringBuilder query, PublicationSearchCriteria criteria) {
 		if (criteria.getThemeId() != ALL_THEMES) {
 			query.append(String.format(THEME_CLAUSE, criteria.getThemeId()));
+		}
+	}
+	
+	private void setType(StringBuilder query, PublicationSearchCriteria criteria) {
+		if (criteria.getThemeId() != ALL_TYPES) {
+			query.append(String.format(TYPE_CLAUSE, criteria.getThemeId()));
 		}
 	}
 	

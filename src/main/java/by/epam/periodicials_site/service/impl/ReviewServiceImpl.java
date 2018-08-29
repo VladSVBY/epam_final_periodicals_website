@@ -9,6 +9,8 @@ import by.epam.periodicials_site.dao.ReviewDao;
 import by.epam.periodicials_site.entity.Review;
 import by.epam.periodicials_site.service.ReviewService;
 import by.epam.periodicials_site.service.exception.ServiceException;
+import by.epam.periodicials_site.service.exception.ValidationException;
+import by.epam.periodicials_site.service.util.Validator;
 
 public class ReviewServiceImpl implements ReviewService {
 	
@@ -27,6 +29,9 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void addReview(Review review) throws ServiceException {
+		if (!Validator.reviewIsValid(review)) {
+			throw new ValidationException("Review data is not valid");
+		}
 		try {
 			reviewDao.create(review);
 		} catch (DaoException e) {
@@ -36,6 +41,9 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void update(Review review) throws ServiceException {
+		if (!Validator.reviewIsValid(review)) {
+			throw new ValidationException("Review data is not valid");
+		}
 		try {
 			reviewDao.update(review);
 		} catch (DaoException e) {

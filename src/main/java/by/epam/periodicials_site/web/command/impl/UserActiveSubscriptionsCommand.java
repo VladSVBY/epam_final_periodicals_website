@@ -6,6 +6,7 @@ import static by.epam.periodicials_site.web.util.WebConstantDeclaration.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import by.epam.periodicials_site.entity.Subscription;
 import by.epam.periodicials_site.service.PublicationService;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.SubscriptionService;
+import by.epam.periodicials_site.service.exception.ServiceException;
 import by.epam.periodicials_site.web.command.Command;
 import by.epam.periodicials_site.web.util.HttpUtil;
 
@@ -30,11 +32,17 @@ public class UserActiveSubscriptionsCommand implements Command {
 		LocaleType locale = HttpUtil.getLocale(request);
 		int userId = (int) request.getSession().getAttribute(SESSION_ATTR_USER_ID);
 		
-		List<Subscription> subscriptions = subscriptionService.readActiveForUser(userId);
-		java.util.Map<Integer, String> publicationNames = new HashMap<>();
-		for (Subscription subscription : subscriptions) {
-			Publication publication = publicationService.read(subscription.getPublicationId(), locale);
-			publicationNames.put(publication.getId(), publication.getName());
+		List<Subscription> subscriptions = null;
+		Map<Integer, String> publicationNames = new HashMap<>();
+		try {
+			subscriptions = subscriptionService.readActiveForUser(userId);
+			for (Subscription subscription : subscriptions) {
+				Publication publication = publicationService.read(subscription.getPublicationId(), locale);
+				publicationNames.put(publication.getId(), publication.getName());
+			}
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		request.setAttribute(REQUEST_ATTR_ACTIVE_SUBSCRIPTION_LIST, subscriptions);

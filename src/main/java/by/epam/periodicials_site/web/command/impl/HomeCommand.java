@@ -36,18 +36,20 @@ public class HomeCommand implements Command {
 		LocaleType locale = HttpUtil.getLocale(request);
 		List<Theme> themes = null;
 		PublicationSearchCriteria criteria = formSerrchCriteria(request);
-		List<Publication> publications = publicationService.readAll(criteria);
+		
 		try {
+			List<Publication> publications = publicationService.readAll(criteria);
 			themes = themeService.readAll(locale);
+			request.setAttribute(REQUEST_ATTR_PUBLICATION_LIST, publications);
+			request.setAttribute(REQUEST_ATTR_THEMES, themes);
+			request.setAttribute(REQUEST_ATTR_PUBLICATION_SEARCH_CRITERIA, criteria);
+			request.getRequestDispatcher(VIEW_HOME).forward(request, response);
 		} catch (ServiceException e) {
 			// TODO logger
 			e.printStackTrace();
 		}
 		
-		request.setAttribute(REQUEST_ATTR_PUBLICATION_LIST, publications);
-		request.setAttribute(REQUEST_ATTR_THEMES, themes);
-		request.setAttribute(REQUEST_ATTR_PUBLICATION_SEARCH_CRITERIA, criteria);
-		request.getRequestDispatcher(VIEW_HOME).forward(request, response);
+		
 	}
 	
 	private PublicationSearchCriteria formSerrchCriteria(HttpServletRequest request) {
