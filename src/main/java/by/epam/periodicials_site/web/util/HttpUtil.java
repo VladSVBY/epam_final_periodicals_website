@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,14 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.epam.periodicials_site.entity.Issue;
 import by.epam.periodicials_site.entity.LocaleType;
-import by.epam.periodicials_site.web.command.impl.RegisterCommand;
-
 public final class HttpUtil {
 	
 	private HttpUtil() {}
@@ -40,7 +38,11 @@ public final class HttpUtil {
 	
 	
 	public static String getReferPage(HttpServletRequest request) {
-		return request.getHeader(REQUEST_HEADER_REFER_PAGE);
+		String page = request.getHeader(REQUEST_HEADER_REFER_PAGE);
+		if (page == null) {
+			page = (String) request.getSession().getAttribute(SESSION_ATTR_REFER_PAGE);
+		}
+		return page;
 	}
 	
 	public static LocaleType getLocale(HttpServletRequest request) {
@@ -63,7 +65,7 @@ public final class HttpUtil {
 		String filePath = request.getServletContext().getRealPath(ISSUE_FILE_BASE_PATH) + issue.getFile();		
 		response.setContentType("application/pdf");
 		File srcFile = new File(filePath);
-	    response.setHeader("Content-Disposition", "filename=\"hello.pdf\"");
+	    response.setHeader("Content-Disposition", "filename=" + srcFile.getName());
 	    Files.copy(srcFile.toPath(), response.getOutputStream());
 	}
 	
@@ -90,11 +92,14 @@ public final class HttpUtil {
 	public static void uploadIssueFile(Issue issue, HttpServletRequest request) throws IOException, ServletException {
 		Part issuePart = request.getPart(REQUEST_PARAM_ISSUE_FILE);
 		try (InputStream fileContent = issuePart.getInputStream()) {
-			String path = request.getServletContext().getRealPath(ISSUE_FILE_BASE_PATH) +String.format("%d/%d", issue.getPublicationId(), issue.getDateOfPublication().getYear());
+			Calendar date = Calendar.getInstance();
+			date.setTime(issue.getDateOfPublication());
+			String addPath = String.format("%d/%d", issue.getPublicationId(), date.get(Calendar.YEAR));
+			String path = request.getServletContext().getRealPath(ISSUE_FILE_BASE_PATH) + addPath;
 			String fileName = issuePart.getSubmittedFileName();
             File file = generateFileForPublicationIssue(path, fileName);
             Files.copy(fileContent, file.toPath());
-           issue.setFile(file.getName());
+           issue.setFile(addPath +"/" + file.getName());
         } 
 	}
 	

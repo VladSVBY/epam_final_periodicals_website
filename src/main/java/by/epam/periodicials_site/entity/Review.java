@@ -17,6 +17,17 @@ public class Review implements Serializable{
 	public Review() {
 		super();
 	}
+	
+	public Review(int id, int userId, int publicationId, Date dateOfPublication, String text, byte mark) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.publicationId = publicationId;
+		this.dateOfPublication = dateOfPublication;
+		this.text = text;
+		this.mark = mark;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -66,7 +77,7 @@ public class Review implements Serializable{
 		result = prime * result + userId;
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -96,7 +107,7 @@ public class Review implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", userId=" + userId + ", publicationId=" + publicationId + ", dateOfPublication="

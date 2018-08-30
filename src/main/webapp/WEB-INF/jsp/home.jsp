@@ -37,6 +37,8 @@
 <body>
 	
 	<%@include file="nav.jsp" %>
+	
+	
 	<div class="content">
 		<div class="left" style="margin-top: 20px">
 		  <div class="input-group mb-4">
@@ -130,7 +132,8 @@
 	            </div>
 	       </li>
 	      <c:forEach items="${publications}" var="publication">
-			  <a href="${contextPath}/controller/publication?id=${publication.id}"><li class="list-group-item">
+			  <a href="${contextPath}/controller/publication?id=${publication.id}">
+			  <li class="list-group-item">
 	      		<div class="row">
 	      				<div class=col-md-1>
 	                        ${publication.id}
@@ -161,8 +164,8 @@
 			</div>		
 			<div class="col">
 				<paginator:display currentPage="${search_criteria.currentPage}" 
-					totalPageCount="50" viewPageCount="3" 
-					urlPattern="${contextPath}/controller/home?theme=${search_criteria.themeId}&order=${search_criteria.orderId}&itemsPerPage=${search_criteria.itemsPerPage}&" />
+					totalPageCount="${search_criteria.pageCount}" viewPageCount="3" 
+					urlPattern="${contextPath}/controller/home?theme=${search_criteria.themeId}&type=${search_criteria.typeId}&order=${search_criteria.orderId}&itemsPerPage=${search_criteria.itemsPerPage}&" />
 			</div>	
 		</div>
 		</div>

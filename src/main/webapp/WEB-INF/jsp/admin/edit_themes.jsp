@@ -53,7 +53,8 @@
 					<div class="form-group col-2">					
 						<button type="submit" class="btn btn-success">${add_theme_button }</button>
 					</div>
-			</div>				
+			</div>	
+			<div style="color:red">${theme_fail_message}</div>			
 		</form>	
 		<div class="bg-success text-white text-center" >
 			<h4>${current_themes_header }:</h4>

@@ -48,8 +48,8 @@ public class LoginCommand implements Command {
 					
 					if (user == null) {
 						String message = MessageResolver.getMessage(INVALID_DATA, locale);
-						request.setAttribute(FAIL_MESSAGE_ADD_PUBLICATION, message);
-						request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
+						request.setAttribute(FAIL_MESSAGE_LOGIN, message);
+						request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
 					} else {
 						HttpSession session = request.getSession();
 						session.setAttribute(SESSION_ATTR_USER_ID, user.getId());
@@ -65,8 +65,8 @@ public class LoginCommand implements Command {
 				}
 			} catch (ValidationException e) {
 				String message = MessageResolver.getMessage(INVALID_DATA, locale);
-				request.setAttribute(FAIL_MESSAGE_ADD_PUBLICATION, message);
-				request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
+				request.setAttribute(FAIL_MESSAGE_LOGIN, message);
+				request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
 			} catch (ServiceException e) {
 				logger.error("Exception during log in", e);
 				request.getRequestDispatcher(VIEW_503_ERROR).forward(request, response);

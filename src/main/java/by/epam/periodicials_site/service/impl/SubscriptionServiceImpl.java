@@ -9,6 +9,7 @@ import java.util.List;
 import by.epam.periodicials_site.dao.DaoException;
 import by.epam.periodicials_site.dao.DaoFactory;
 import by.epam.periodicials_site.dao.SubscriptionDao;
+import by.epam.periodicials_site.dao.UserDao;
 import by.epam.periodicials_site.entity.BalanceOperation;
 import by.epam.periodicials_site.entity.BalanceOperationType;
 import by.epam.periodicials_site.entity.LocaleType;
@@ -19,12 +20,14 @@ import by.epam.periodicials_site.entity.dto.LocalizedPublication;
 import by.epam.periodicials_site.service.PublicationService;
 import by.epam.periodicials_site.service.ServiceFactory;
 import by.epam.periodicials_site.service.SubscriptionService;
+import by.epam.periodicials_site.service.exception.InsufficientFundsInAccountException;
 import by.epam.periodicials_site.service.exception.ServiceException;
 
 public class SubscriptionServiceImpl implements SubscriptionService{
 	
 	private SubscriptionDao subscriptionDao = DaoFactory.getSubscriptionDao();
 	private PublicationService publicationService = ServiceFactory.getPublicationService();
+	private UserDao userDao = DaoFactory.getUserDao();
 
 	@Override
 	public List<Subscription> readActiveForUser(int userId) throws ServiceException {
@@ -113,6 +116,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 		try {
 			LocalizedPublication publication = publicationService.readLocalized(publicationId);
 			double subscriptionPrice = publication.getPrice() * duration;
+			if (subscriptionPrice > userDao.getUserBalance(userId)) {
+				throw new InsufficientFundsInAccountException();
+			}
 			Calendar startDate = Calendar.getInstance();
 			startDate.set(Calendar.DAY_OF_MONTH, 1);
 			startDate.set(Calendar.MONTH, startMonth);

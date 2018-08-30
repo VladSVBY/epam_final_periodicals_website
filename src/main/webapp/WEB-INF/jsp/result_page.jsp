@@ -7,8 +7,8 @@
 <%@ page import ="by.epam.periodicials_site.entity.LocaleType" %>
 
 <fmt:setLocale value="${sessionScope.locale}"/>	
-<fmt:bundle basename="localization.local" prefix = "result_page.back_button">
-	<fmt:message key="profile_option" var="profile_option"/>
+<fmt:bundle basename="localization.local" prefix = "result_page.">
+	<fmt:message key="back_button" var="back_button"/>
 </fmt:bundle>
 
 <!DOCTYPE html>

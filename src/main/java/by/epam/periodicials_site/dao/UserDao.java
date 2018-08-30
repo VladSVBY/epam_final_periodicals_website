@@ -23,4 +23,6 @@ public interface UserDao {
 	boolean emailExists(String email) throws DaoException;
 	
 	List<User> readUsersHavingSuscription(int publicationId, Date date) throws DaoException;
+	
+	double getUserBalance(int userId) throws DaoException;
 }

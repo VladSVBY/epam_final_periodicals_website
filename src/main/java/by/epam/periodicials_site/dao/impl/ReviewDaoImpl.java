@@ -67,7 +67,7 @@ public class ReviewDaoImpl implements ReviewDao{
 			if (result > 0) {
 				ResultSet resultSet = ps.getGeneratedKeys();
 				resultSet.next();
-				review.setId(resultSet.getInt(ID));
+				review.setId(resultSet.getInt(1));
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Exception creating review", e);

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import ="by.epam.periodicials_site.entity.Role" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     
@@ -32,7 +33,7 @@
             		<a class="nav-link" href="${contextPath}/controller/user/profile">${userName}</a>
             	</c:if>
             	<c:if test="${userRole == Role.ADMIN}">
-            		<a class="nav-link" href="${contextPath}/controller/admin/add-publicatio-form">${userName}</a>
+            		<a class="nav-link" href="${contextPath}/controller/admin/add-publication-form">${userName}admin</a>
             	</c:if>
 	         	</li>
 	         	<li class="nav-item active">

@@ -21,6 +21,7 @@ public class UserDaoImpl implements UserDao{
 	
 	private static final String READ_USER_WITH_EMAIL_OR_LOGIN = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE (login=? OR email=?) AND password=?";
 	private static final String READ_USER_WITH_ID = "SELECT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id WHERE users.id=?";
+	private static final String GET_USER_BALANCE = "SELECT balance FROM users WHERE users.id=?";
 	private static final String READ_USERS_WITH_SUBSCRIPTION = "SELECT DISTINCT users.id, login, password, users.name, surname, email, balance, roles.name AS role FROM users JOIN roles ON users.id_role=roles.id JOIN subscriptions ON users.id=subscriptions.id_user WHERE id_publication=? AND ? BETWEEN TIMESTAMP(start_date) AND TIMESTAMP(end_date)";
 	private static final String CREATE_USER = "INSERT INTO `periodicals_website`.`users` (`login`, `password`, `name`, `surname`, `email`) VALUES (?, ?, ?, ?, ?)";
 	private static final String ADD_TO_USER_BALANCE = "UPDATE `periodicals_website`.`users` SET `balance`=(SELECT balance + ? FROM (SELECT balance FROM users WHERE id=?) res) WHERE `id`=?";
@@ -157,6 +158,22 @@ public class UserDaoImpl implements UserDao{
 			throw new DaoException("Exception reading user", e);
 		}
 		return users;
+	}
+
+	@Override
+	public double getUserBalance(int userId) throws DaoException {
+		try (Connection connection = connectionPool.getConnection(); 
+				PreparedStatement ps = connection.prepareStatement(GET_USER_BALANCE)){
+			ps.setInt(1, userId);
+
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getDouble("balance");
+			}			
+		} catch (SQLException e) {
+			throw new DaoException("Exception reading user", e);
+		}
+		return 0;
 	}
 
 	private User createUser(ResultSet resultSet) throws SQLException {

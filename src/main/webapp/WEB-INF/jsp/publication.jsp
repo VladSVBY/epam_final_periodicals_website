@@ -70,13 +70,15 @@
 					<c:if test="${userRole == Role.CUSTOMER}">
 						<hr>
 						<h2>${make_subscription_header}:</h2><br>
-						<form method="get" action="${pageContext.request.contextPath}/controller/user/subscribe">
+						<form method="post" action="${pageContext.request.contextPath}/controller/user/subscribe">
 							<input type="hidden" name="publication_id" value="${publication.id}" />
 							<div class="input-group mb-2" >
 							  <div class="input-group-prepend">
 							    <label class="input-group-text" for="inputGroupSelect01">${subscription_start_month }: </label>
 							  </div>
 							  <select class="custom-select" name="start_month">
+							  <c:set var="month" value="${Calendar.getInstance().get(Calendar.YEAR)}" />
+							  
 							    <option value="1">1</option>
 							    <option value="2">2</option>
 							    <option value="3">3</option>
@@ -111,6 +113,7 @@
 							  </select>
 							</div>
 							<div>${subscription_price} <span id="total_price"></span></div>
+							<div style="color:red">${subscription_fail_message}</div>
 							<button type="submit" class="btn btn-primary">${create_subscription_button}</button>
 						</form>
 					</c:if>					

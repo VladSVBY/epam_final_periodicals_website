@@ -49,6 +49,7 @@ public class ShowPublicationCommand implements Command {
 			request.setAttribute(REQUEST_ATTR_REVIEWS, reviews);
 			request.setAttribute(REQUEST_ATTR_THEME, theme);
 			request.setAttribute(REQUEST_ATTR_TYPE, type);
+			request.setAttribute(FAIL_MESSAGE_SUBSCRIPTION, request.getParameter(FAIL_MESSAGE_SUBSCRIPTION));
 			request.getRequestDispatcher(VIEW_PUBLICATION_DETAILS).forward(request, response);
 		} catch (ServiceException e) {
 			logger.error("Exception showing publication", e);

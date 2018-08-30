@@ -10,6 +10,7 @@ public class PublicationSearchCriteria {
 	private int orderId;
 	private int currentPage;
 	private int itemsPerPage;
+	private int pageCount;
 	
 	public PublicationSearchCriteria() {
 		super();
@@ -61,6 +62,14 @@ public class PublicationSearchCriteria {
 
 	public void setTypeId(int typeId) {
 		this.typeId = typeId;
+	}
+
+	public int getPageCount() {
+		return pageCount;
+	}
+
+	public void setPageCount(int pageCount) {
+		this.pageCount = pageCount;
 	}
 	
 }

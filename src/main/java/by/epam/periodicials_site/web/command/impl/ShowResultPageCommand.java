@@ -19,7 +19,7 @@ public class ShowResultPageCommand implements Command{
 			String returnPage = request.getParameter(REQUEST_PARAM_RETURN_PAGE);
 			
 			request.setAttribute(WebConstantDeclaration.REQUEST_ATTR_MESSAGE, message);
-			request.setAttribute(WebConstantDeclaration.REQUEST_ATTR_TYPES, returnPage);
+			request.setAttribute(WebConstantDeclaration.REQUEST_ATTR_RETURN_PAGE, returnPage);
 			request.getRequestDispatcher(WebConstantDeclaration.VIEW_RESULT_PAGE).forward(request, response);	
 	}
 

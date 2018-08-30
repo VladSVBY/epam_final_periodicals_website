@@ -17,6 +17,8 @@ import org.xml.sax.SAXException;
 
 public final class CommandXmlParser {
 	
+	private CommandXmlParser() {}
+	
 	private static final String FILE_PATH = "/commands.xml";
 	
 	private static final String COMMAND_TAG = "command";
@@ -40,7 +42,6 @@ public final class CommandXmlParser {
             }
 	        
 		} catch (ParserConfigurationException | SAXException | IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			// TODO logger
 			throw new XmlCommandParsingException("Exception during command parsing", e);
 		}
 		return commands;

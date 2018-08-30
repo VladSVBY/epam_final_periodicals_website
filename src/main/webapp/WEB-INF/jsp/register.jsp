@@ -42,6 +42,7 @@
 	    </fieldset>
 	    <p style="color:red">${fail_message}</p>
 	    <fieldset id="actions">
+	    	<div style="color:red">${register_fail_message}</div>
 	        <input type="submit" id="submit" value="${button_register}" onclick="formHash(this.form, this.form.real_password)">
 	        <a href="${contextPath}/controller/login">${link_login}</a>
 	    </fieldset>

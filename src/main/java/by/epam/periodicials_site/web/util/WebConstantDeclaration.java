@@ -99,6 +99,7 @@ public final class WebConstantDeclaration {
 	public static final String COMMAND_EDIT_THEMES = "/admin/edit-themes";
 	public static final String COMMAND_EDIT_TYPES = "/admin/edit-types";
 	public static final String COMMAND_ADD_ISSUE = "/admin/add-issue";
+	public static final String COMMAND_SUBSCRIIBE = "/user/subscribe";
 	
 	public static final String FAIL_MESSAGE_ADD_PUBLICATION = "publication_fail_message";
 	public static final String FAIL_MESSAGE_ADD_ISSUE = "issue_fail_message";
@@ -107,6 +108,8 @@ public final class WebConstantDeclaration {
 	public static final String FAIL_MESSAGE_ADD_TYPE = "type_fail_message";
 	public static final String FAIL_MESSAGE_UPDATE_TYPE = "type_fail_message";
 	public static final String FAIL_MESSAGE_UPDATE_REVIEW = "review_fail_message";
-	public static final String FAIL_MESSAGE_REGISTER = "registerw_fail_message";
+	public static final String FAIL_MESSAGE_REGISTER = "register_fail_message";
+	public static final String FAIL_MESSAGE_SUBSCRIPTION = "subscription_fail_message";
+	public static final String FAIL_MESSAGE_LOGIN = "login_fail_message";
 	
 }

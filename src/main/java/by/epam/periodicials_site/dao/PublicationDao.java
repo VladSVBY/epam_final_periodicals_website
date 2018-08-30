@@ -18,5 +18,7 @@ public interface PublicationDao {
 	void update(LocalizedPublication localizedPublication) throws DaoException;
 	
 	LocalizedPublication readLocalized(int id) throws DaoException;
+	
+	int getTotalCount(PublicationSearchCriteria criteria) throws DaoException;
 
 }

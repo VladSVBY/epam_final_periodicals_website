@@ -24,8 +24,9 @@ public class CustomerAccessFilter implements Filter {
     	Role role = (Role) httpRequest.getSession().getAttribute(WebConstantDeclaration.SESSION_ATTR_USER_ROLE);
     	
     	if (role == null){
+    		httpRequest.getSession().setAttribute(WebConstantDeclaration.SESSION_ATTR_REFER_PAGE, httpRequest.getRequestURI());
     		httpResponse.sendRedirect(HttpUtil.formRedirectUrl(httpRequest, WebConstantDeclaration.COMMAND_LOGIN));
-    	} else if (role.equals(Role.CUSTOMER)) {
+    	} else if (role == Role.CUSTOMER) {
     		chain.doFilter(httpRequest, httpResponse);
     	} else {
     		httpResponse.sendRedirect(HttpUtil.formRedirectUrl(httpRequest, WebConstantDeclaration.COMMAND_HOME));

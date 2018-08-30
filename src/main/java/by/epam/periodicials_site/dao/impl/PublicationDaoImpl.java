@@ -31,6 +31,7 @@ public class PublicationDaoImpl implements PublicationDao{
 	private static final String READ_BY_ID_AND_LOCALE = "SELECT id, name, description, periodicity, id_theme, id_type, price, rating, picture_path FROM publications JOIN publications_local ON publications_local.id_publication = publications.id WHERE id = ? AND locale = ?";
 	private static final String READ_BY_ID = "SELECT id, name, description, periodicity, id_theme, id_type, price, rating, picture_path, locale FROM publications JOIN publications_local ON publications_local.id_publication = publications.id WHERE id = ?";
 	private static final String READ_ALL_WITH_LOCALE = "SELECT id, name, description, periodicity, id_theme, id_type, price, rating, picture_path FROM publications JOIN publications_local ON publications_local.id_publication = publications.id WHERE publications_local.locale='%s'";
+	private static final String COUNT_PUBLICATIONS = "SELECT COUNT(id) FROM publications JOIN publications_local ON publications_local.id_publication = publications.id WHERE publications_local.locale='%s'";
 	private static final String CREATE_MAIN_INFO = "INSERT INTO `periodicals_website`.`publications` (`periodicity`, `id_theme`, `id_type`, `price`, `rating`, `picture_path`) VALUES (?, ?, ?, ?, ?, ?)";
 	private static final String CREATE_LOCALIZED_INFO = "INSERT INTO `periodicals_website`.`publications_local` (`id_publication`, `locale`, `name`, `description`) VALUES (?, ?, ?, ?)";
 	private static final String UPDATE_MAIN_INFO = "UPDATE `periodicals_website`.`publications` SET `periodicity`=?, `id_theme`=?, `id_type`=?, `price`=?, `rating`=?, `picture_path`=? WHERE `id`=?";
@@ -212,6 +213,22 @@ public class PublicationDaoImpl implements PublicationDao{
 		}
 	}
 	
+	@Override
+	public int getTotalCount(PublicationSearchCriteria criteria) throws DaoException {
+		String query = formCountQuery(criteria);
+		try (Connection connection = connectionPool.getConnection(); 
+				Statement statement = connection.createStatement()
+		){	
+			
+			ResultSet resultSet = statement.executeQuery(query);		
+			
+			resultSet.next();
+			return resultSet.getInt(1);
+		} catch (SQLException e) {
+			throw new DaoException("Exception counting publications", e);
+		}
+	}
+
 	private Publication formPublication(ResultSet resultSet) throws SQLException {
 		Publication publication = new Publication();
 		publication.setId(resultSet.getInt(ID));
@@ -262,6 +279,13 @@ public class PublicationDaoImpl implements PublicationDao{
 		return query.toString();
 	}
 	
+	private String formCountQuery(PublicationSearchCriteria criteria) {
+		StringBuilder query = new StringBuilder(String.format(COUNT_PUBLICATIONS, criteria.getLocale().name()));
+		setTheme(query, criteria);
+		setType(query, criteria);
+		return query.toString();
+	}
+	
 	private void setTheme(StringBuilder query, PublicationSearchCriteria criteria) {
 		if (criteria.getThemeId() != ALL_THEMES) {
 			query.append(String.format(THEME_CLAUSE, criteria.getThemeId()));
@@ -292,8 +316,7 @@ public class PublicationDaoImpl implements PublicationDao{
 	
 	private void setLimit(StringBuilder query, PublicationSearchCriteria criteria) {
 		int start = criteria.getItemsPerPage() * (criteria.getCurrentPage() - 1);
-		int end = criteria.getItemsPerPage() * (criteria.getCurrentPage());
-		query.append(String.format(LIMIT_CLAUSE, start, end));
+		query.append(String.format(LIMIT_CLAUSE, start, criteria.getItemsPerPage()));
 	}
 
 }

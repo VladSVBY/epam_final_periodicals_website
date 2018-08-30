@@ -35,7 +35,7 @@
 	        <input id="username" name="login_or_email" type="text" placeholder="${placeholder_login}" required autofocus />   
 	        <input  id="password" name="real_password" type="password" placeholder="${placeholder_password}" />
 	    </fieldset>
-	    <span style="color: red"><c:if test="${loginFailedMsg != null}">${msg_login_failed}</c:if></span>
+	    <div style="color:red">${login_fail_message}</div>
 	    <fieldset id="actions">
 	        <input type="submit" id="submit" value="${button_login}" onclick="formHash(this.form, this.form.real_password)">
 	        <a href="register">${link_register}</a>

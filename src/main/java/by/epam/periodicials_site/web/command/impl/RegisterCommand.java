@@ -51,7 +51,7 @@ public class RegisterCommand implements Command {
 				
 			} catch (ValidationException e) {
 				String message = MessageResolver.getMessage(INVALID_DATA, locale);
-				request.setAttribute(FAIL_MESSAGE_ADD_PUBLICATION, message);
+				request.setAttribute(FAIL_MESSAGE_REGISTER, message);
 				request.getRequestDispatcher(VIEW_REGISTER).forward(request, response);
 			} catch (LoginAlreadyExistsException e) {
 				String message = MessageResolver.getMessage(LOGIN_EXISTS_MESSAGE, locale);

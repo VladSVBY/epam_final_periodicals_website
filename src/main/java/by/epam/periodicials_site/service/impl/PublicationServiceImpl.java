@@ -25,6 +25,8 @@ public class PublicationServiceImpl implements PublicationService{
 		List<Publication> publications = Collections.emptyList();
 		try {
 			publications = publicationDao.readAll(criteria);
+			int totalPageCount = (int) Math.ceil((double) publicationDao.getTotalCount(criteria) / criteria.getItemsPerPage());
+			criteria.setPageCount(totalPageCount);
 		} catch (DaoException e) {
 			throw new ServiceException(e);
 		}

@@ -53,7 +53,8 @@
 					<div class="form-group col-2">					
 						<button type="submit" class="btn btn-success">${add_type_button }</button>
 					</div>
-			</div>				
+			</div>	
+			<div style="color:red">${type_fail_message}</div>			
 		</form>	
 		<div class="bg-success text-white text-center" >
 			<h4>${current_types_header }:</h4>
